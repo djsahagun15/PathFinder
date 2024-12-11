@@ -3,7 +3,7 @@
 
 
 int main() {
-    PathFinder pf (10, 10);
+    PathFinder pf (25, 25);
     pf.run();
     return 0;
 }

@@ -1,7 +1,6 @@
 #ifndef __PATHFINDER_HPP__
 #define __PATHFINDER_HPP__
 
-#include <memory>
 #include "grid.hpp"
 
 

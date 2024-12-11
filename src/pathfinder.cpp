@@ -1,11 +1,8 @@
-#include <raylib.h>
-
 #include "pathfinder.hpp"
 
 
 PathFinder::PathFinder(unsigned int cols, unsigned int rows) : _grid(std::make_unique<Grid>(cols, rows)) {
-    InitWindow(0, 0, "PathFinder");
-    ToggleFullscreen();
+    InitWindow(700, 700, "PathFinder");
     SetTargetFPS(60);
 }
 
@@ -19,14 +16,16 @@ void PathFinder::run() {
     while (!WindowShouldClose()) {
         this->update();
         BeginDrawing();
-            ClearBackground(WHITE);
+            ClearBackground(LIGHTGRAY);
             this->draw();
         EndDrawing();
     }
 }
 
 
-void PathFinder::update() {}
+void PathFinder::update() {
+    this->_grid->update();
+}
 
 
 void PathFinder::draw() const {
