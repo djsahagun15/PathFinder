@@ -9,6 +9,9 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Define source files
 set(SOURCES
+    ${CMAKE_SOURCE_DIR}/src/node.cpp
+    ${CMAKE_SOURCE_DIR}/src/grid.cpp
+    ${CMAKE_SOURCE_DIR}/src/pathfinder.cpp
     ${CMAKE_SOURCE_DIR}/src/main.cpp
 )
 
