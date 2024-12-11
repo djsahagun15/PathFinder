@@ -6,13 +6,12 @@
 
 #define NODE_SIZE   20.0f
 
-enum State { NONE, START, END, WALL };
 
-class Color;
+enum State { NONE, START, END, WALL };
 
 class Node {
 public:
-    Node(int x, int y);
+    Node(Rectangle rect, int x, int y);
 
     void changeState(State newState);
     void draw() const;

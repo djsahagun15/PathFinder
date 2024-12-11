@@ -2,7 +2,6 @@
 #define __PATHFINDER_GRID_HPP__
 
 #include <vector>
-
 #include "node.hpp"
 
 
@@ -10,6 +9,12 @@ class Grid {
 public:
     Grid(unsigned int cols, unsigned int rows);
     ~Grid() = default;
+
+    float getWidth() const;
+    float getHeight() const;
+
+    unsigned int getCols() const;
+    unsigned int getRows() const;
 
     void update();
     void draw() const;

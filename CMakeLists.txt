@@ -11,6 +11,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 set(SOURCES
     ${CMAKE_SOURCE_DIR}/src/node.cpp
     ${CMAKE_SOURCE_DIR}/src/grid.cpp
+    ${CMAKE_SOURCE_DIR}/src/camera.cpp
     ${CMAKE_SOURCE_DIR}/src/pathfinder.cpp
     ${CMAKE_SOURCE_DIR}/src/main.cpp
 )

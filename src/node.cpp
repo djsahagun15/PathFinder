@@ -1,13 +1,8 @@
 #include "node.hpp"
 
 
-Node::Node(int x, int y) : 
-_rect((Rectangle){
-    x * NODE_SIZE + 1.0f, 
-    y * NODE_SIZE + 1.0f, 
-    NODE_SIZE + 1.0f, 
-    NODE_SIZE + 1.0f
-}),
+Node::Node(Rectangle rect, int x, int y) : 
+_rect(rect),
 _x(x), _y(y), 
 _state(NONE), 
 _color(std::make_unique<Color>(WHITE)) {}

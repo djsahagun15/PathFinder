@@ -1,9 +1,15 @@
 #include "pathfinder.hpp"
+#include "camera.hpp"
 
 
-PathFinder::PathFinder(unsigned int cols, unsigned int rows) : _grid(std::make_unique<Grid>(cols, rows)) {
-    InitWindow(700, 700, "PathFinder");
+CameraController cameraController;
+
+
+PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
+    InitWindow(0, 0, "PathFinder");
     SetTargetFPS(60);
+
+    this->_grid = std::make_unique<Grid>(cols, rows);
 }
 
 
@@ -15,6 +21,9 @@ PathFinder::~PathFinder() {
 void PathFinder::run() {
     while (!WindowShouldClose()) {
         this->update();
+
+        cameraController.update();
+        
         BeginDrawing();
             ClearBackground(LIGHTGRAY);
             this->draw();
