@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 
 #include "grid.hpp"
 #include "camera.hpp"
@@ -34,8 +35,11 @@ Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows) {
         }
     }
     
-    this->_matrix[0][0]->changeState(State::START);
-    this->_matrix[rows - 1][cols - 1]->changeState(State::END);
+    this->_startNode = this->_matrix[0][0].get();
+    this->_startNode->changeState(State::START);
+
+    this->_endNode = this->_matrix[rows - 1][cols - 1].get();
+    this->_endNode->changeState(State::END);
 }
 
 
@@ -71,10 +75,36 @@ unsigned int Grid::getRows() const { return this->_rows; };
 
 
 void Grid::update() {
+    static State nodeNewState = State::NONE;
+    static Node* prevSelectedNode = nullptr;
+    
     Vector2 mouse = cameraController.getMouseWorldPos();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && isMouseInRect(mouse)) {
         Node* selectedNode = this->getNode(mouse);
-        selectedNode->changeState(State::WALL);
+        
+        if (nodeNewState == State::NONE) nodeNewState = selectedNode->getState();
+
+        if (nodeNewState == State::START) {
+            if (prevSelectedNode && prevSelectedNode != selectedNode) {
+                prevSelectedNode->changeState(State::EMPTY);
+                selectedNode->changeState(State::START);
+            }
+        }
+        else if (nodeNewState == State::END) {
+            if (prevSelectedNode && prevSelectedNode != selectedNode) {
+                prevSelectedNode->changeState(State::EMPTY);
+                selectedNode->changeState(State::END);
+            }
+        }
+        else {
+            selectedNode->changeState((State)(State::EMPTY + State::WALL - nodeNewState));
+        }
+        
+
+        prevSelectedNode = selectedNode;
+    } else {
+        nodeNewState = State::NONE;
+        prevSelectedNode = nullptr; 
     }
 }
 

@@ -6,7 +6,7 @@ CameraController cameraController;
 
 
 PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
-    InitWindow(0, 0, "PathFinder");
+    InitWindow(700, 700, "PathFinder");
     SetTargetFPS(60);
 
     this->_grid = std::make_unique<Grid>(cols, rows);

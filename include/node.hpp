@@ -7,13 +7,15 @@
 #define NODE_SIZE   20.0f
 
 
-enum State { NONE, START, END, WALL };
+enum State { NONE, START, END, PATH, EMPTY, WALL };
 
 class Node {
 public:
     Node(Rectangle rect, int x, int y);
 
+    State getState() const;
     void changeState(State newState);
+
     void draw() const;
 
 private:

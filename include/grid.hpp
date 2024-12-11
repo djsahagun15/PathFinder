@@ -24,6 +24,9 @@ private:
     Node* getNode(Vector2 mouse) const;
 
     std::vector<std::vector<std::unique_ptr<Node>>> _matrix;
+    Node* _startNode;
+    Node* _endNode;
+    
     unsigned int _cols, _rows;
 
     Rectangle _rect;
