@@ -21,7 +21,10 @@ public:
 private:
     Rectangle _rect;
     int _x, _y;
+    
     State _state;
+
+    Node* parent;
 
     std::unique_ptr<Color> _color;
 };

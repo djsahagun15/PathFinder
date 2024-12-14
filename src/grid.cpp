@@ -88,12 +88,16 @@ void Grid::update() {
             if (prevSelectedNode && prevSelectedNode != selectedNode) {
                 prevSelectedNode->changeState(State::EMPTY);
                 selectedNode->changeState(State::START);
+
+                this->_startNode = selectedNode;
             }
         }
         else if (nodeNewState == State::END) {
             if (prevSelectedNode && prevSelectedNode != selectedNode) {
                 prevSelectedNode->changeState(State::EMPTY);
                 selectedNode->changeState(State::END);
+
+                this->_endNode = selectedNode;
             }
         }
         else {
