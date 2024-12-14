@@ -1,5 +1,5 @@
-#ifndef __PATHFINDER_NODE_HPP__
-#define __PATHFINDER_NODE_HPP__
+#ifndef _PATHFINDER_NODE_HPP_
+#define _PATHFINDER_NODE_HPP_
 
 #include <raylib.h>
 #include <memory>

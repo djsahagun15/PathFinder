@@ -57,8 +57,8 @@ Node* Grid::getNode(Vector2 mouse) const {
     mouse.x -= offset.x;
     mouse.y -= offset.y;
     
-    unsigned int x = mouse.x / 20;
-    unsigned int y = mouse.y / 20;
+    unsigned int x = mouse.x / NODE_SIZE;
+    unsigned int y = mouse.y / NODE_SIZE;
 
     x = std::max(std::min(x, this->_cols - 1), 0U);
     y = std::max(std::min(y, this->_rows - 1), 0U);
@@ -79,7 +79,7 @@ void Grid::update() {
     static Node* prevSelectedNode = nullptr;
     
     Vector2 mouse = cameraController.getMouseWorldPos();
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && isMouseInRect(mouse)) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && this->isMouseInRect(mouse)) {
         Node* selectedNode = this->getNode(mouse);
         
         if (nodeNewState == State::NONE) nodeNewState = selectedNode->getState();
@@ -100,11 +100,10 @@ void Grid::update() {
             selectedNode->changeState((State)(State::EMPTY + State::WALL - nodeNewState));
         }
         
-
         prevSelectedNode = selectedNode;
-    } else {
+    } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
         nodeNewState = State::NONE;
-        prevSelectedNode = nullptr; 
+        prevSelectedNode = nullptr;
     }
 }
 

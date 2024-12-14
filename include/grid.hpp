@@ -1,5 +1,5 @@
-#ifndef __PATHFINDER_GRID_HPP__
-#define __PATHFINDER_GRID_HPP__
+#ifndef _PATHFINDER_GRID_HPP_
+#define _PATHFINDER_GRID_HPP_
 
 #include <vector>
 #include "node.hpp"

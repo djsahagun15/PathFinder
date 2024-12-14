@@ -1,5 +1,5 @@
-#ifndef __PATHFINDER_CAMERA_HPP__
-#define __PATHFINDER_CAMERA_HPP__
+#ifndef _PATHFINDER_CAMERA_HPP_
+#define _PATHFINDER_CAMERA_HPP_
 
 #include <raylib.h>
 

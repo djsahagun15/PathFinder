@@ -1,5 +1,5 @@
-#ifndef __PATHFINDER_HPP__
-#define __PATHFINDER_HPP__
+#ifndef _PATHFINDER_HPP_
+#define _PATHFINDER_HPP_
 
 #include "grid.hpp"
 
