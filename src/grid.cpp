@@ -75,38 +75,38 @@ unsigned int Grid::getRows() const { return this->_rows; };
 
 
 void Grid::update() {
-    static State nodeNewState = State::NONE;
+    static State selectedState = State::NONE;
     static Node* prevSelectedNode = nullptr;
     
     Vector2 mouse = cameraController.getMouseWorldPos();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && this->isMouseInRect(mouse)) {
         Node* selectedNode = this->getNode(mouse);
         
-        if (nodeNewState == State::NONE) nodeNewState = selectedNode->getState();
+        if (selectedState == State::NONE) selectedState = selectedNode->getState();
 
-        if (nodeNewState == State::START) {
-            if (prevSelectedNode && prevSelectedNode != selectedNode) {
-                prevSelectedNode->changeState(State::EMPTY);
+        if (selectedState == State::START) {
+            if (selectedNode != this->_endNode) {
+                this->_startNode->changeState(State::EMPTY);
                 selectedNode->changeState(State::START);
 
                 this->_startNode = selectedNode;
             }
         }
-        else if (nodeNewState == State::END) {
-            if (prevSelectedNode && prevSelectedNode != selectedNode) {
-                prevSelectedNode->changeState(State::EMPTY);
+        else if (selectedState == State::END) {
+            if (selectedNode != this->_startNode) {
+                this->_endNode->changeState(State::EMPTY);
                 selectedNode->changeState(State::END);
 
                 this->_endNode = selectedNode;
             }
         }
-        else {
-            selectedNode->changeState((State)(State::EMPTY + State::WALL - nodeNewState));
+        else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
+            selectedNode->changeState((State)(State::EMPTY + State::WALL - selectedState));
         }
         
         prevSelectedNode = selectedNode;
     } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-        nodeNewState = State::NONE;
+        selectedState = State::NONE;
         prevSelectedNode = nullptr;
     }
 }
