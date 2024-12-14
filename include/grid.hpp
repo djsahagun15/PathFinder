@@ -16,6 +16,8 @@ public:
     unsigned int getCols() const;
     unsigned int getRows() const;
 
+    std::vector<Node*> getNeighbors(Node* node) const;
+
     void update();
     void draw() const;
 
@@ -30,6 +32,8 @@ private:
     unsigned int _cols, _rows;
 
     Rectangle _rect;
+
+    friend class PathFinder;
 };
 
 

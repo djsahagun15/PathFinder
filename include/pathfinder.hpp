@@ -15,7 +15,7 @@ private:
     void update();
     void draw() const;
 
-    std::unique_ptr<Grid> _grid;
+    std::shared_ptr<Grid> _grid;
 };
 
 

@@ -13,7 +13,8 @@ public:
 protected:
     PathfindingAlgorithm(std::shared_ptr<Grid> grid);
 
-    std::vector<std::unique_ptr<Node>> getNeighbors(Node* node);
+    std::vector<Node*> getNeighbors(Node* node) const;
+    void tracePath(Node* start, Node* end);
 
     std::shared_ptr<Grid> _grid;
 };

@@ -36,10 +36,10 @@ Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows) {
     }
     
     this->_startNode = this->_matrix[0][0].get();
-    this->_startNode->changeState(State::START);
+    this->_startNode->setState(State::START);
 
     this->_endNode = this->_matrix[rows - 1][cols - 1].get();
-    this->_endNode->changeState(State::END);
+    this->_endNode->setState(State::END);
 }
 
 
@@ -74,6 +74,21 @@ unsigned int Grid::getCols() const { return this->_cols; };
 unsigned int Grid::getRows() const { return this->_rows; };
 
 
+std::vector<Node*> Grid::getNeighbors(Node* node) const {
+    std::vector<Node*> neighbors;
+    
+    unsigned int x = node->getColIndex();
+    unsigned int y = node->getRowIndex();
+
+    if (x > 0) neighbors.push_back(this->_matrix[y][x - 1].get());
+    if (x < this->_cols - 1) neighbors.push_back(this->_matrix[y][x + 1].get());
+    if (y > 0) neighbors.push_back(this->_matrix[y - 1][x].get());
+    if (y < this->_rows - 1) neighbors.push_back(this->_matrix[y + 1][x].get());
+
+    return neighbors;
+}
+
+
 void Grid::update() {
     static State selectedState = State::NONE;
     static Node* prevSelectedNode = nullptr;
@@ -86,22 +101,22 @@ void Grid::update() {
 
         if (selectedState == State::START) {
             if (selectedNode != this->_endNode) {
-                this->_startNode->changeState(State::EMPTY);
-                selectedNode->changeState(State::START);
+                this->_startNode->setState(State::EMPTY);
+                selectedNode->setState(State::START);
 
                 this->_startNode = selectedNode;
             }
         }
         else if (selectedState == State::END) {
             if (selectedNode != this->_startNode) {
-                this->_endNode->changeState(State::EMPTY);
-                selectedNode->changeState(State::END);
+                this->_endNode->setState(State::EMPTY);
+                selectedNode->setState(State::END);
 
                 this->_endNode = selectedNode;
             }
         }
         else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
-            selectedNode->changeState((State)(State::EMPTY + State::WALL - selectedState));
+            selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
         }
         
         prevSelectedNode = selectedNode;

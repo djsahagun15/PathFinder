@@ -14,7 +14,16 @@ public:
     Node(Rectangle rect, int x, int y);
 
     State getState() const;
-    void changeState(State newState);
+    void setState(State newState);
+
+    bool isVisited() const;
+    void setVisited(bool visited);
+
+    unsigned int getColIndex() const;
+    unsigned int getRowIndex() const;
+
+    Node* getParent() const;
+    void setParent(Node* newParent);
 
     void draw() const;
 
@@ -23,8 +32,9 @@ private:
     int _x, _y;
     
     State _state;
+    bool _isVisited;
 
-    Node* parent;
+    Node* _parent;
 
     std::unique_ptr<Color> _color;
 };

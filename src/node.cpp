@@ -5,24 +5,49 @@ Node::Node(Rectangle rect, int x, int y) :
 _rect(rect),
 _x(x), _y(y), 
 _state(EMPTY), 
-_color(std::make_unique<Color>(WHITE)) {}
+_isVisited(false),
+_color(std::make_unique<Color>(WHITE)),
+_parent(nullptr) {}
 
 
 State Node::getState() const { return this->_state; }
 
 
-void Node::changeState(State state) {
+void Node::setState(State state) {
     this->_state = state;
     switch (this->_state) {
         case START : { *this->_color = GREEN; }; break;
         case END : { *this->_color = RED; }; break;
-        case EMPTY : { *this->_color = WHITE; }; break;
+        case PATH : { *this->_color = YELLOW; }; break;
+        case EMPTY : { *this->_color = this->_isVisited ? SKYBLUE : WHITE; }; break;
         case WALL : { *this->_color = BLACK; }; break;
 
+        
         case NONE :
         default: break;
     }
 }
+
+
+bool Node::isVisited() const { return this->_isVisited; }
+
+
+void Node::setVisited(bool visited) {
+    this->_isVisited = visited;
+    this->setState(this->_state);
+}
+
+
+unsigned int Node::getColIndex() const { return this->_x; }
+
+
+unsigned int Node::getRowIndex() const { return this->_y; }
+
+
+Node* Node::getParent() const { return this->_parent; }
+
+
+void Node::setParent(Node* newParent) { this->_parent = newParent; }
 
 
 void Node::draw() const {
