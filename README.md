@@ -38,7 +38,8 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 **Keyboard Controls:**
 - **R**     : Reset the grid to its initial state
 - **C**     : Clear the path
-- **Space** : Run the selected algorithm (Only BFS as of now)
+- **1**     : Run Breadth-First Search
+- **2**     : Run Dijkstra's Algorithm
 
 ## Build with CMake
 1. **Clone this repository:**
