@@ -23,6 +23,22 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 - **Documentation**
    - Add comments in the source code.
 
+## Current Controls
+**Mouse Controls:**
+- **Left Click**
+   - Press and drag to move the start (green) and end (red) nodes
+   - Add/remove walls on the grid
+
+- **Right Click**
+   - Move the **camera**
+
+- **Mouse Wheel**
+   - Camera zoom
+
+**Keyboard Controls:**
+- **R**     : Reset the grid to its initial states
+- **C**     : Clear the path
+- **Space** : Run the selected algorithm (Only BFS as of now)
 
 ## Build with CMake
 1. **Clone this repository:**
