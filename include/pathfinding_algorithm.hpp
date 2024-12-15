@@ -4,11 +4,15 @@
 #include "grid.hpp"
 
 
+float euclideanDistance(Vector2 a, Vector2 b);
+float manhattanDistance(Vector2 a, Vector2 b);
+
+
 class PathfindingAlgorithm {
 public:
     virtual ~PathfindingAlgorithm() = default;
 
-    virtual Node* findPath(Node* start, Node* end) = 0;
+    virtual void findPath(Node* start, Node* end) = 0;
 
 protected:
     PathfindingAlgorithm(std::shared_ptr<Grid> grid);

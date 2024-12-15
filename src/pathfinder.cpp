@@ -1,6 +1,7 @@
 #include "pathfinder.hpp"
 #include "camera.hpp"
 #include "bfs.hpp"
+#include "dijkstra.hpp"
 
 
 CameraController cameraController;
@@ -13,7 +14,7 @@ PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
     this->_grid = std::make_shared<Grid>(cols, rows);
 
     this->_BFS = std::make_unique<BFS>(this->_grid);
-    // this->_Dijkstra = std::make_unique<Dijkstra>(this->_grid);
+    this->_Dijkstra = std::make_unique<Dijkstra>(this->_grid);
     // this->_AStar = std::make_unique<AStar>(this->_grid);
 }
 
@@ -62,13 +63,26 @@ void PathFinder::update() {
 
     if (isSolvedOnce && this->_grid->_shouldUpdatePath) {
         this->clearPath();
-        this->_BFS->findPath(this->_grid->_startNode, this->_grid->_endNode);
+
+        this->_selectedAlgorithm(this->_grid->_startNode, this->_grid->_endNode);
     }
-    
-    if (IsKeyPressed(KEY_SPACE)) {
+
+    if (IsKeyPressed(KEY_ONE)) {
         this->clearPath();
 
-        this->_BFS->findPath(this->_grid->_startNode, this->_grid->_endNode);
+        this->_selectedAlgorithm = [this](Node* start, Node* end) {
+            this->_BFS->findPath(start, end);
+        };
+
+        this->_selectedAlgorithm(this->_grid->_startNode, this->_grid->_endNode);
+    } else if (IsKeyPressed(KEY_TWO)) {
+        this->clearPath();
+
+        this->_selectedAlgorithm = [this](Node* start, Node* end) {
+            this->_Dijkstra->findPath(start, end);
+        };
+
+        this->_selectedAlgorithm(this->_grid->_startNode, this->_grid->_endNode);
 
         isSolvedOnce = true;
     }

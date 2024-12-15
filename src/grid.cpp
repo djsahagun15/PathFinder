@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <limits>
 
 #include "grid.hpp"
 #include "camera.hpp"
@@ -95,6 +96,8 @@ void Grid::resetShouldUpdatePathFlag() { this->_shouldUpdatePath = false; }
 
 
 void Grid::clearPath() {
+    float MAX = std::numeric_limits<float>::max();
+    
     for (const auto& row : this->_matrix) {
         for (const auto& node : row) {
             State nodeState = node->getState();
@@ -103,6 +106,8 @@ void Grid::clearPath() {
 
             node->setState(nodeState);
             node->setParent(nullptr);
+            node->setGCost(MAX);
+            node->setHCost(MAX);
         }
     }
 
@@ -111,10 +116,14 @@ void Grid::clearPath() {
 
 
 void Grid::reset() {
+    float MAX = std::numeric_limits<float>::max();
+    
     for (const auto& row : this->_matrix) {
         for (const auto& node : row) {
             node->setState(State::EMPTY);
             node->setParent(nullptr);
+            node->setGCost(MAX);
+            node->setHCost(MAX);
         }
     }
 

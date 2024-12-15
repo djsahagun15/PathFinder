@@ -1,5 +1,7 @@
 #include "node.hpp"
 
+#include <limits>
+
 
 Node::Node(Rectangle rect, int x, int y) : 
 _rect(rect),
@@ -7,7 +9,19 @@ _x(x), _y(y),
 _state(EMPTY), 
 _isVisited(false),
 _color(std::make_unique<Color>(WHITE)),
-_parent(nullptr) {}
+_parent(nullptr) {
+    this->_center = {
+        rect.x + rect.width / 2.0f,
+        rect.y + rect.height / 2.0f
+    };
+
+    float MAX = std::numeric_limits<float>::max();
+    this->_gCost = MAX;
+    this->_hCost = MAX;
+}
+
+
+Vector2 Node::getCenter() const { return this->_center; }
 
 
 State Node::getState() const { return this->_state; }
@@ -38,6 +52,27 @@ unsigned int Node::getColIndex() const { return this->_x; }
 
 
 unsigned int Node::getRowIndex() const { return this->_y; }
+
+
+float Node::getGCost() const { return this->_gCost; }
+
+
+void Node::setGCost(float gCost) {
+    this->_gCost = gCost;
+    this->_fCost = this->_gCost + this->_hCost;
+}
+
+
+float Node::getHCost() const { return this->_hCost; }
+
+
+void Node::setHCost(float hCost) {
+    this->_hCost = hCost;
+    this->_fCost = this->_gCost + this->_hCost;
+}
+
+
+float Node::getFCost() const { return this->_fCost; }
 
 
 Node* Node::getParent() const { return this->_parent; }

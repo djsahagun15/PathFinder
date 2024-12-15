@@ -4,6 +4,8 @@
 #include "grid.hpp"
 #include "pathfinding_algorithm.hpp"
 
+#include <functional>
+
 
 class PathFinder {
 public:
@@ -22,6 +24,9 @@ private:
     std::shared_ptr<Grid> _grid;
 
     std::unique_ptr<PathfindingAlgorithm> _BFS;
+    std::unique_ptr<PathfindingAlgorithm> _Dijkstra;
+
+    std::function<void(Node*, Node*)> _selectedAlgorithm;
 };
 
 

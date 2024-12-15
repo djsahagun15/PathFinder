@@ -8,7 +8,7 @@ class BFS : public PathfindingAlgorithm {
 public:
     BFS(std::shared_ptr<Grid> grid);
 
-    Node* findPath(Node* start, Node* end) override;
+    void findPath(Node* start, Node* end) override;
 };
 
 

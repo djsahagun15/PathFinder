@@ -6,7 +6,7 @@
 BFS::BFS(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
 
 
-Node* BFS::findPath(Node* start, Node* end) {
+void BFS::findPath(Node* start, Node* end) {
     std::queue<Node*> nodeQueue;
     nodeQueue.push(start);
 
@@ -34,6 +34,4 @@ Node* BFS::findPath(Node* start, Node* end) {
             }
         }
     }
-
-    return nullptr;
 }

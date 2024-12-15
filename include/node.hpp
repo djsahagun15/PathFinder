@@ -13,6 +13,8 @@ class Node {
 public:
     Node(Rectangle rect, int x, int y);
 
+    Vector2 getCenter() const;
+
     State getState() const;
     bool isVisited() const;
     void setState(State newState, bool visited = false);
@@ -20,17 +22,30 @@ public:
     unsigned int getColIndex() const;
     unsigned int getRowIndex() const;
 
+    float getGCost() const;
+    void setGCost(float gCost);
+
+    float getHCost() const;
+    void setHCost(float hCost);
+
+    float getFCost() const;
+
     Node* getParent() const;
     void setParent(Node* newParent);
 
     void draw() const;
 
 private:
+    Vector2 _center;
     Rectangle _rect;
     int _x, _y;
     
     State _state;
     bool _isVisited;
+
+    float _gCost;
+    float _hCost;
+    float _fCost;
 
     Node* _parent;
 
