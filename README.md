@@ -36,7 +36,7 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
    - Camera zoom
 
 **Keyboard Controls:**
-- **R**     : Reset the grid to its initial states
+- **R**     : Reset the grid to its initial state
 - **C**     : Clear the path
 - **Space** : Run the selected algorithm (Only BFS as of now)
 
