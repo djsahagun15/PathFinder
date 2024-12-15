@@ -1,6 +1,6 @@
 #include "pathfinding_algorithm.hpp"
-#include <cmath>
 
+#include <cmath>
 
 float euclideanDistance(Vector2 a, Vector2 b) {
     return std::sqrt(

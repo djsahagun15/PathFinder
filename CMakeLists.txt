@@ -15,6 +15,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/src/pathfinding_algorithm.cpp
     ${CMAKE_SOURCE_DIR}/src/bfs.cpp
     ${CMAKE_SOURCE_DIR}/src/dijkstra.cpp
+    ${CMAKE_SOURCE_DIR}/src/astar.cpp
     ${CMAKE_SOURCE_DIR}/src/pathfinder.cpp
     ${CMAKE_SOURCE_DIR}/src/main.cpp
 )

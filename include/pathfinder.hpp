@@ -25,6 +25,7 @@ private:
 
     std::unique_ptr<PathfindingAlgorithm> _BFS;
     std::unique_ptr<PathfindingAlgorithm> _Dijkstra;
+    std::unique_ptr<PathfindingAlgorithm> _AStar;
 
     std::function<void(Node*, Node*)> _selectedAlgorithm;
 };

@@ -24,9 +24,11 @@ public:
 
     float getGCost() const;
     void setGCost(float gCost);
+    void setGCost(Node* startNode);
 
     float getHCost() const;
     void setHCost(float hCost);
+    void setHCost(Node* endNode);
 
     float getFCost() const;
 

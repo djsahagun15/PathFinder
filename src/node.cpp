@@ -1,6 +1,11 @@
-#include "node.hpp"
-
 #include <limits>
+#include <cmath>
+
+#include "node.hpp"
+#include "pathfinding_algorithm.hpp"
+
+
+
 
 
 Node::Node(Rectangle rect, int x, int y) : 
@@ -15,9 +20,9 @@ _parent(nullptr) {
         rect.y + rect.height / 2.0f
     };
 
-    float MAX = std::numeric_limits<float>::max();
-    this->_gCost = MAX;
-    this->_hCost = MAX;
+    this->_gCost = std::numeric_limits<float>::max();
+    this->_hCost = 0.0f;
+    this->_fCost = this->_gCost + this->_hCost;
 }
 
 
@@ -54,22 +59,34 @@ unsigned int Node::getColIndex() const { return this->_x; }
 unsigned int Node::getRowIndex() const { return this->_y; }
 
 
-float Node::getGCost() const { return this->_gCost; }
-
-
 void Node::setGCost(float gCost) {
     this->_gCost = gCost;
     this->_fCost = this->_gCost + this->_hCost;
 }
 
 
-float Node::getHCost() const { return this->_hCost; }
+void Node::setGCost(Node* startNode) {
+    this->_gCost = manhattanDistance(this->_center, startNode->_center);
+    this->_fCost = this->_gCost + this->_hCost;
+}
+
+
+float Node::getGCost() const { return this->_gCost; }
 
 
 void Node::setHCost(float hCost) {
     this->_hCost = hCost;
     this->_fCost = this->_gCost + this->_hCost;
 }
+
+
+void Node::setHCost(Node* endNode) {
+    this->_hCost = manhattanDistance(this->_center, endNode->_center);
+    this->_fCost = this->_gCost + this->_hCost;
+}
+
+
+float Node::getHCost() const { return this->_hCost; }
 
 
 float Node::getFCost() const { return this->_fCost; }

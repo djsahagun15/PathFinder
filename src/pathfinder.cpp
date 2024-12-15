@@ -2,6 +2,7 @@
 #include "camera.hpp"
 #include "bfs.hpp"
 #include "dijkstra.hpp"
+#include "astar.hpp"
 
 
 CameraController cameraController;
@@ -15,7 +16,7 @@ PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
 
     this->_BFS = std::make_unique<BFS>(this->_grid);
     this->_Dijkstra = std::make_unique<Dijkstra>(this->_grid);
-    // this->_AStar = std::make_unique<AStar>(this->_grid);
+    this->_AStar = std::make_unique<AStar>(this->_grid);
 }
 
 
@@ -75,11 +76,23 @@ void PathFinder::update() {
         };
 
         this->_selectedAlgorithm(this->_grid->_startNode, this->_grid->_endNode);
+
+        isSolvedOnce = true;
     } else if (IsKeyPressed(KEY_TWO)) {
         this->clearPath();
 
         this->_selectedAlgorithm = [this](Node* start, Node* end) {
             this->_Dijkstra->findPath(start, end);
+        };
+
+        this->_selectedAlgorithm(this->_grid->_startNode, this->_grid->_endNode);
+
+        isSolvedOnce = true;
+    } else if (IsKeyPressed(KEY_THREE)) {
+        this->clearPath();
+
+        this->_selectedAlgorithm = [this](Node* start, Node* end) {
+            this->_AStar->findPath(start, end);
         };
 
         this->_selectedAlgorithm(this->_grid->_startNode, this->_grid->_endNode);
