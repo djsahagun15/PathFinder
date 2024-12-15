@@ -7,7 +7,7 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 - **Algorithm Implementation**
    - ~~Implement Breath-First Search (BFS)~~
    - ~~Implement Dijkstra's Algorithm.~~
-   - Implement A* Algorithm.
+   - ~~Implement A* Algorithm.~~
      
 - **Grid Features**
    - Implement grid resizing.
@@ -40,6 +40,7 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 - **C**     : Clear the path
 - **1**     : Run Breadth-First Search
 - **2**     : Run Dijkstra's Algorithm
+- **3**     : Run A* Algorithm
 
 ## Build with CMake
 1. **Clone this repository:**
