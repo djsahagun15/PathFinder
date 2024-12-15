@@ -6,7 +6,7 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 ## **TODO**
 - **Algorithm Implementation**
    - ~~Implement Breath-First Search (BFS)~~
-   - Implement Dijkstra's Algorithm.
+   - ~~Implement Dijkstra's Algorithm.~~
    - Implement A* Algorithm.
      
 - **Grid Features**
