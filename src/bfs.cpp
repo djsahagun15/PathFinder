@@ -15,7 +15,8 @@ Node* BFS::findPath(Node* start, Node* end) {
         Node* current = nodeQueue.front();
         nodeQueue.pop();
 
-        current->setVisited(true);
+        State currentState = current->getState();
+        current->setState(currentState, true);
 
         if (current == end) {
             tracePath(start, end);
@@ -24,8 +25,10 @@ Node* BFS::findPath(Node* start, Node* end) {
         
         std::vector<Node*> neighbors = this->getNeighbors(current);
         for (Node* neighbor : neighbors) {
-            if (!neighbor->isVisited()) {
-                neighbor->setVisited(true);
+            State neighborState = neighbor->getState();
+
+            if (neighborState != State::WALL && !neighbor->isVisited()) {
+                neighbor->setState(neighborState, true);
                 neighbor->setParent(current);
 
                 nodeQueue.push(neighbor);

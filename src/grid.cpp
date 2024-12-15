@@ -8,7 +8,7 @@
 extern CameraController cameraController;
 
 
-Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows) {
+Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _shouldUpdatePath(false) {
     Vector2 offset {
         (GetScreenWidth() - cols * NODE_SIZE) / 2.0f,
         (GetScreenHeight() - rows * NODE_SIZE) / 2.0f
@@ -89,6 +89,46 @@ std::vector<Node*> Grid::getNeighbors(Node* node) const {
 }
 
 
+bool Grid::shouldUpdatePath() const { return this->_shouldUpdatePath; }
+
+
+void Grid::resetShouldUpdatePathFlag() { this->_shouldUpdatePath = false; }
+
+
+void Grid::clearPath() {
+    for (const auto& row : this->_matrix) {
+        for (const auto& node : row) {
+            State nodeState = node->getState();
+
+            if (nodeState == State::PATH) nodeState = State::EMPTY;
+
+            node->setState(nodeState);
+            node->setParent(nullptr);
+        }
+    }
+
+    this->_shouldUpdatePath = false;
+}
+
+
+void Grid::reset() {
+    for (const auto& row : this->_matrix) {
+        for (const auto& node : row) {
+            node->setState(State::EMPTY);
+            node->setParent(nullptr);
+        }
+    }
+
+    this->_startNode = this->_matrix[0][0].get();
+    this->_startNode->setState(State::START);
+
+    this->_endNode = this->_matrix[this->_rows - 1][this->_cols - 1].get();
+    this->_endNode->setState(State::END);
+
+    this->_shouldUpdatePath = false;
+}
+
+
 void Grid::update() {
     static State selectedState = State::NONE;
     static Node* prevSelectedNode = nullptr;
@@ -118,6 +158,8 @@ void Grid::update() {
         else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
             selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
         }
+
+        this->_shouldUpdatePath = true;
         
         prevSelectedNode = selectedNode;
     } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {

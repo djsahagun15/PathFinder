@@ -13,7 +13,9 @@ _parent(nullptr) {}
 State Node::getState() const { return this->_state; }
 
 
-void Node::setState(State state) {
+void Node::setState(State state, bool visited) {
+    this->_isVisited = visited;
+    
     this->_state = state;
     switch (this->_state) {
         case START : { *this->_color = GREEN; }; break;
@@ -30,12 +32,6 @@ void Node::setState(State state) {
 
 
 bool Node::isVisited() const { return this->_isVisited; }
-
-
-void Node::setVisited(bool visited) {
-    this->_isVisited = visited;
-    this->setState(this->_state);
-}
 
 
 unsigned int Node::getColIndex() const { return this->_x; }

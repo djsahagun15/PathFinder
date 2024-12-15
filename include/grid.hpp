@@ -18,6 +18,12 @@ public:
 
     std::vector<Node*> getNeighbors(Node* node) const;
 
+    bool shouldUpdatePath() const;
+    void resetShouldUpdatePathFlag();
+    
+    void clearPath();
+    void reset();
+
     void update();
     void draw() const;
 
@@ -28,6 +34,8 @@ private:
     std::vector<std::vector<std::unique_ptr<Node>>> _matrix;
     Node* _startNode;
     Node* _endNode;
+
+    bool _shouldUpdatePath;
     
     unsigned int _cols, _rows;
 

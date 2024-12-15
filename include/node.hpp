@@ -14,10 +14,8 @@ public:
     Node(Rectangle rect, int x, int y);
 
     State getState() const;
-    void setState(State newState);
-
     bool isVisited() const;
-    void setVisited(bool visited);
+    void setState(State newState, bool visited = false);
 
     unsigned int getColIndex() const;
     unsigned int getRowIndex() const;
