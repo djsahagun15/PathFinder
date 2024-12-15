@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 
 #include "grid.hpp"
 #include "camera.hpp"

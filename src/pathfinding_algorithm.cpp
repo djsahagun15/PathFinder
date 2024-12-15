@@ -9,7 +9,6 @@ std::vector<Node*> PathfindingAlgorithm::getNeighbors(Node* node) const {
 }
 
 
-#include <iostream>
 void PathfindingAlgorithm::tracePath(Node* start, Node* end) {
     Node* current = end;
     while (current) {

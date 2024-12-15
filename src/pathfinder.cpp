@@ -47,7 +47,6 @@ void PathFinder::clearPath() {
 }
 
 
-#include <iostream>
 void PathFinder::update() {
     static bool isSolvedOnce = false;
 
