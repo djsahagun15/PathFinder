@@ -145,6 +145,8 @@ void Grid::update() {
     Vector2 mouse = cameraController.getMouseWorldPos();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && this->isMouseInRect(mouse)) {
         Node* selectedNode = this->getNode(mouse);
+
+        if (selectedNode == prevSelectedNode) return;
         
         if (selectedState == State::NONE) selectedState = selectedNode->getState();
 
@@ -168,7 +170,7 @@ void Grid::update() {
             selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState), selectedNode->isVisited());
         }
 
-        if (selectedNode != prevSelectedNode) this->_shouldUpdatePath = true;
+        this->_shouldUpdatePath = true;
         
         prevSelectedNode = selectedNode;
     } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {

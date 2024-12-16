@@ -25,6 +25,13 @@ void AStar::findPath(Node* start, Node* end, float speed) {
     added = 0;
     
     do {
+        if (this->_queue.empty()) {
+            this->_isFirstIter = true;
+
+            added = 0;
+            break;
+        }
+        
         Node* current = this->_queue.top();
         this->_queue.pop();
 
