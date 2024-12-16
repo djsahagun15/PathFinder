@@ -13,8 +13,9 @@ public:
     float getWidth() const;
     float getHeight() const;
 
-    unsigned int getCols() const;
-    unsigned int getRows() const;
+    unsigned int getColCount() const;
+    unsigned int getRowCount() const;
+    unsigned int getColRowCount() const;
 
     std::vector<Node*> getNeighbors(Node* node) const;
 

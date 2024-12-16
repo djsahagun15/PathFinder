@@ -6,22 +6,36 @@
 AStar::AStar(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
 
 
-void AStar::findPath(Node* start, Node* end) {
-    std::priority_queue<Node*, std::vector<Node*>, CompareNode> nodeQueue;
+void AStar::findPath(Node* start, Node* end, float speed) {
+    static int added = 0;
 
-    start->setGCost(0.0f);
-    start->setHCost(end);
-    nodeQueue.push(start);
+    if (this->_isFirstIter) {
+        while (!this->_queue.empty()) this->_queue.pop();
+        
+        start->setGCost(0.0f);
+        start->setHCost(end);
+
+        this->_queue.push(start);
+        added++;
+
+        this->_isFirstIter = false;
+    }
+
+    int maxIter = speed == 0.0f ? this->_grid->getColRowCount() : added * speed + 1;
+    added = 0;
     
-    while (!nodeQueue.empty()) {
-        Node* current = nodeQueue.top();
-        nodeQueue.pop();
+    do {
+        Node* current = this->_queue.top();
+        this->_queue.pop();
 
         State currentState = current->getState();
         current->setState(currentState, true);
 
         if (current == end) {
-            tracePath(start, end);
+            this->tracePath(start, end);
+            this->reset();
+            
+            added = 0;
             break;
         }
 
@@ -39,8 +53,21 @@ void AStar::findPath(Node* start, Node* end) {
                 neighbor->setHCost(end);
                 neighbor->setParent(current);
 
-                nodeQueue.push(neighbor);
+                this->_queue.push(neighbor);
+
+                added++;
             }
         }
-    }
+    } while (--maxIter);
+}
+
+
+void AStar::reset() {
+    this->_isFirstIter = true;
+    while (!this->_queue.empty()) this->_queue.pop();
+}
+
+
+bool AStar::isSearchComplete() {
+    return this->_queue.empty();
 }

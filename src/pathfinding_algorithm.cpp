@@ -15,7 +15,7 @@ float manhattanDistance(Vector2 a, Vector2 b) {
 }
 
 
-PathfindingAlgorithm::PathfindingAlgorithm(std::shared_ptr<Grid> grid) : _grid(grid) {}
+PathfindingAlgorithm::PathfindingAlgorithm(std::shared_ptr<Grid> grid) : _grid(grid), _isFirstIter(true) {}
 
 
 std::vector<Node*> PathfindingAlgorithm::getNeighbors(Node* node) const {

@@ -6,21 +6,35 @@
 Dijkstra::Dijkstra(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
 
 
-void Dijkstra::findPath(Node* start, Node* end) {
-    std::priority_queue<Node*, std::vector<Node*>, CompareNode> nodeQueue;
+void Dijkstra::findPath(Node* start, Node* end, float speed) {
+    static int added = 0;
 
-    start->setGCost(0.0f);
-    nodeQueue.push(start);
+    if (this->_isFirstIter) {
+        while (!this->_queue.empty()) this->_queue.pop();
+        
+        start->setGCost(0.0f);
+
+        this->_queue.push(start);
+        added++;
+
+        this->_isFirstIter = false;
+    }
+
+    int maxIter = speed == 0.0f ? this->_grid->getColRowCount() : added * speed + 1;
+    added = 0;
     
-    while (!nodeQueue.empty()) {
-        Node* current = nodeQueue.top();
-        nodeQueue.pop();
+    do {
+        Node* current = this->_queue.top();
+        this->_queue.pop();
 
         State currentState = current->getState();
         current->setState(currentState, true);
 
         if (current == end) {
-            tracePath(start, end);
+            this->tracePath(start, end);
+            this->reset();
+            
+            added = 0;
             break;
         }
 
@@ -30,16 +44,28 @@ void Dijkstra::findPath(Node* start, Node* end) {
 
             if (neighborState == State::WALL || neighbor->isVisited()) continue;
             
-            float nDistance = manhattanDistance(current->getCenter(), neighbor->getCenter());
-            float tentativeCost = current->getGCost() + nDistance;
+            float gCost = current->getGCost() + manhattanDistance(current->getCenter(), neighbor->getCenter());
 
-            if (tentativeCost < neighbor->getGCost()) {
+            if (gCost < neighbor->getGCost()) {
                 neighbor->setState(neighborState, true);
-                neighbor->setGCost(tentativeCost);
+                neighbor->setGCost(gCost);
                 neighbor->setParent(current);
 
-                nodeQueue.push(neighbor);
+                this->_queue.push(neighbor);
+
+                added++;
             }
         }
-    }
+    } while (--maxIter);
+}
+
+
+void Dijkstra::reset() {
+    this->_isFirstIter = true;
+    while (!this->_queue.empty()) this->_queue.pop();
+}
+
+
+bool Dijkstra::isSearchComplete() {
+    return this->_queue.empty();
 }

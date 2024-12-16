@@ -12,7 +12,9 @@ class PathfindingAlgorithm {
 public:
     virtual ~PathfindingAlgorithm() = default;
 
-    virtual void findPath(Node* start, Node* end) = 0;
+    virtual void findPath(Node* start, Node* end, float speed = 0.0f) = 0;
+    virtual void reset() = 0;
+    virtual bool isSearchComplete() = 0;
 
 protected:
     PathfindingAlgorithm(std::shared_ptr<Grid> grid);
@@ -21,6 +23,8 @@ protected:
     void tracePath(Node* start, Node* end);
 
     std::shared_ptr<Grid> _grid;
+
+    bool _isFirstIter;
 };
 
 

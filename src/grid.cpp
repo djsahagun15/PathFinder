@@ -70,8 +70,9 @@ Node* Grid::getNode(Vector2 mouse) const {
 float Grid::getWidth() const { return this->_rect.width; };
 float Grid::getHeight() const { return this->_rect.height; };
 
-unsigned int Grid::getCols() const { return this->_cols; };
-unsigned int Grid::getRows() const { return this->_rows; };
+unsigned int Grid::getColCount() const { return this->_cols; };
+unsigned int Grid::getRowCount() const { return this->_rows; };
+unsigned int Grid::getColRowCount() const { return this->_cols * this->_rows; };
 
 
 std::vector<Node*> Grid::getNeighbors(Node* node) const {
@@ -164,10 +165,10 @@ void Grid::update() {
             }
         }
         else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
-            selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
+            selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState), selectedNode->isVisited());
         }
 
-        this->_shouldUpdatePath = true;
+        if (selectedNode != prevSelectedNode) this->_shouldUpdatePath = true;
         
         prevSelectedNode = selectedNode;
     } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
