@@ -51,7 +51,7 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
 
             if (neighborState == State::WALL || neighbor->isVisited()) continue;
             
-            float gCost = current->getGCost() + manhattanDistance(current->getCenter(), neighbor->getCenter());
+            float gCost = current->getGCost() + current->getDistance(neighbor);
 
             if (gCost < neighbor->getGCost()) {
                 neighbor->setState(neighborState, true);

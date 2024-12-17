@@ -13,7 +13,7 @@ class Node {
 public:
     Node(Rectangle rect, int x, int y);
 
-    Vector2 getCenter() const;
+    float getDistance(Node* other) const;
 
     State getState() const;
     bool isVisited() const;

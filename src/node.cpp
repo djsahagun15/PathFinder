@@ -26,7 +26,9 @@ _parent(nullptr) {
 }
 
 
-Vector2 Node::getCenter() const { return this->_center; }
+float Node::getDistance(Node* other) const {
+    return std::abs(this->_x - other->_x) + std::abs(this->_y - other->_y);
+}
 
 
 State Node::getState() const { return this->_state; }
