@@ -42,7 +42,15 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 - **2**     : Run Dijkstra's Algorithm
 - **3**     : Run A* Algorithm
 
-## Build with CMake
+## Prerequisites
+   Before building the project, make sure you have the following installed in your system:
+   - **GCC or Clang**   : C/C++ compiler (required)
+   - **CMake**          : Build system (required)
+   - **Emscripten SDK** (Optional. Required for building the web version)
+   - **Python**         (Optional. Required for building the web version; emsdk requires Python)
+   - **Git**            (Optional. Required for building the web version; emsdk requires Git)
+
+## Building for Desktop
 1. **Clone this repository:**
    ```
    git clone https://github.com/djsahagun15/PathFinder.git
@@ -61,4 +69,41 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
    The binaries are saved in the PathFinder/bin folder, or use the following command to run the application:
    ```
    make run
+   ```
+
+## Building for Web
+1. Install Emscripten SDK
+   Download the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html)([GitHub](https://github.com/emscripten-core/emsdk)).
+
+   Execute the following commands to install and activate the latest Emscripten SDK tools:
+   ```
+   ./emsdk update
+   ./emsdk install latest
+   ./emsdk activate latest
+
+   source ./emsdk_env.sh
+   ```
+
+2. **Clone this repository:**
+   ```
+   git clone https://github.com/djsahagun15/PathFinder.git
+   cd PathFinder
+   ```
+
+3. **Build the project:**
+   ```
+   emcmake cmake -S . -B build -DPLATFORM=Web
+   cmake --build build
+   ```
+
+4. **Run the application:**
+   Go to the bin folder where the `.html` is located and create a `localhost` using Python:
+   ```
+   cd bin
+   python -m http.server [port](12345)
+   ```
+
+   Access the webpage from a browser with the web address:
+   ```
+   localhost:[port]/PathFinder.html
    ```
