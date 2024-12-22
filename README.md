@@ -72,8 +72,8 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
    ```
 
 ## Building for Web
-1. Install Emscripten SDK
-   Download the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html)([GitHub](https://github.com/emscripten-core/emsdk)).
+1. **Install Emscripten SDK**
+   Download the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) ([GitHub](https://github.com/emscripten-core/emsdk)).
 
    Execute the following commands to install and activate the latest Emscripten SDK tools:
    ```
