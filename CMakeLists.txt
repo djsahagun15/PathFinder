@@ -33,6 +33,12 @@ FetchContent_Declare(
 # Make sure raylib is available and build it if needed
 FetchContent_MakeAvailable(raylib)
 
+if (EMSCRIPTEN)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s GL_ENABLE_GET_PROC_ADDRESS=1")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+endif()
+
+
 # Create executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 

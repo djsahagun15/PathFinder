@@ -28,16 +28,27 @@ PathFinder::~PathFinder() {
 
 
 void PathFinder::run() {
-    while (!WindowShouldClose()) {
+    #if defined(PLATFORM_WEB)
         this->update();
 
         cameraController.update();
-        
+
         BeginDrawing();
             ClearBackground(LIGHTGRAY);
             this->draw();
         EndDrawing();
-    }
+    #else
+        while (!WindowShouldClose()) {
+            this->update();
+
+            cameraController.update();
+            
+            BeginDrawing();
+                ClearBackground(LIGHTGRAY);
+                this->draw();
+            EndDrawing();
+        }
+    #endif
 }
 
 
