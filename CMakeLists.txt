@@ -4,8 +4,6 @@ project(PathFinder)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Add include directories
-include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Define source files
 set(SOURCES
@@ -16,6 +14,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/src/bfs.cpp
     ${CMAKE_SOURCE_DIR}/src/dijkstra.cpp
     ${CMAKE_SOURCE_DIR}/src/astar.cpp
+    ${CMAKE_SOURCE_DIR}/src/control_panel.cpp
     ${CMAKE_SOURCE_DIR}/src/pathfinder.cpp
     ${CMAKE_SOURCE_DIR}/src/main.cpp
 )
@@ -33,8 +32,14 @@ FetchContent_Declare(
 # Make sure raylib is available and build it if needed
 FetchContent_MakeAvailable(raylib)
 
+# Add include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/include
+    ${raygui_SOURCE_DIR}/src
+)
+
 if (EMSCRIPTEN)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s GL_ENABLE_GET_PROC_ADDRESS=1")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s GL_ENABLE_GET_PROC_ADDRESS=1 --shell-file ${CMAKE_SOURCE_DIR}/src/shell.html")
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
 
