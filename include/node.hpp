@@ -19,12 +19,11 @@ public:
     bool isVisited() const;
     void setState(State newState, bool visited = false);
 
-    unsigned int getColIndex() const;
-    unsigned int getRowIndex() const;
+    unsigned int getX() const;
+    unsigned int getY() const;
 
     float getGCost() const;
     void setGCost(float gCost);
-    void setGCost(Node* startNode);
 
     float getHCost() const;
     void setHCost(float hCost);

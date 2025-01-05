@@ -27,7 +27,7 @@ _parent(nullptr) {
 
 
 float Node::getDistance(Node* other) const {
-    return std::abs(this->_x - other->_x) + std::abs(this->_y - other->_y);
+    return manhattanDistance(this->_center, other->_center);
 }
 
 
@@ -55,20 +55,14 @@ void Node::setState(State state, bool visited) {
 bool Node::isVisited() const { return this->_isVisited; }
 
 
-unsigned int Node::getColIndex() const { return this->_x; }
+unsigned int Node::getX() const { return this->_x; }
 
 
-unsigned int Node::getRowIndex() const { return this->_y; }
+unsigned int Node::getY() const { return this->_y; }
 
 
 void Node::setGCost(float gCost) {
     this->_gCost = gCost;
-    this->_fCost = this->_gCost + this->_hCost;
-}
-
-
-void Node::setGCost(Node* startNode) {
-    this->_gCost = manhattanDistance(this->_center, startNode->_center);
     this->_fCost = this->_gCost + this->_hCost;
 }
 
@@ -83,7 +77,7 @@ void Node::setHCost(float hCost) {
 
 
 void Node::setHCost(Node* endNode) {
-    this->_hCost = manhattanDistance(this->_center, endNode->_center);
+    this->_hCost = this->getDistance(endNode);
     this->_fCost = this->_gCost + this->_hCost;
 }
 

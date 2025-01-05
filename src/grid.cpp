@@ -21,24 +21,24 @@ Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _sh
         rows * NODE_SIZE + 1.0f
     };
     
-    this->_matrix.resize(rows);
-    for (int row = 0; row < rows; row++) {
-        this->_matrix[row].resize(cols);
-        for (int col = 0; col < cols; col++) {
+    this->_matrix.resize(cols);
+    for (int col = 0; col < cols; col++) {
+        this->_matrix[col].resize(rows);
+        for (int row = 0; row < rows; row++) {
             Rectangle nRect {
                 offset.x + col * NODE_SIZE + 1.0f,
                 offset.y + row * NODE_SIZE + 1.0f,
                 NODE_SIZE + 1.0f, 
                 NODE_SIZE + 1.0f
             };
-            this->_matrix[row][col] = std::make_unique<Node>(nRect, col, row);
+            this->_matrix[col][row] = std::make_unique<Node>(nRect, col, row);
         }
     }
     
     this->_startNode = this->_matrix[0][0].get();
     this->_startNode->setState(State::START);
 
-    this->_endNode = this->_matrix[rows - 1][cols - 1].get();
+    this->_endNode = this->_matrix[cols - 1][rows - 1].get();
     this->_endNode->setState(State::END);
 }
 
@@ -63,7 +63,7 @@ Node* Grid::getNode(Vector2 mouse) const {
     x = std::max(std::min(x, this->_cols - 1), 0U);
     y = std::max(std::min(y, this->_rows - 1), 0U);
     
-    return this->_matrix[y][x].get();
+    return this->_matrix[x][y].get();
 }
 
 
@@ -78,13 +78,13 @@ unsigned int Grid::getColRowCount() const { return this->_cols * this->_rows; };
 std::vector<Node*> Grid::getNeighbors(Node* node) const {
     std::vector<Node*> neighbors;
     
-    unsigned int x = node->getColIndex();
-    unsigned int y = node->getRowIndex();
+    unsigned int x = node->getX();
+    unsigned int y = node->getY();
 
-    if (x > 0) neighbors.push_back(this->_matrix[y][x - 1].get());
-    if (x < this->_cols - 1) neighbors.push_back(this->_matrix[y][x + 1].get());
-    if (y > 0) neighbors.push_back(this->_matrix[y - 1][x].get());
-    if (y < this->_rows - 1) neighbors.push_back(this->_matrix[y + 1][x].get());
+    if (x > 0) neighbors.push_back(this->_matrix[x - 1][y].get());
+    if (x < this->_cols - 1) neighbors.push_back(this->_matrix[x + 1][y].get());
+    if (y > 0) neighbors.push_back(this->_matrix[x][y - 1].get());
+    if (y < this->_rows - 1) neighbors.push_back(this->_matrix[x][y + 1].get());
 
     return neighbors;
 }
@@ -99,8 +99,8 @@ void Grid::resetShouldUpdatePathFlag() { this->_shouldUpdatePath = false; }
 void Grid::clearPath() {
     float MAX = std::numeric_limits<float>::max();
     
-    for (const auto& row : this->_matrix) {
-        for (const auto& node : row) {
+    for (const auto& col : this->_matrix) {
+        for (const auto& node : col) {
             State nodeState = node->getState();
 
             if (nodeState == State::PATH) nodeState = State::EMPTY;
@@ -108,7 +108,7 @@ void Grid::clearPath() {
             node->setState(nodeState);
             node->setParent(nullptr);
             node->setGCost(MAX);
-            node->setHCost(MAX);
+            node->setHCost(0.0);
         }
     }
 
@@ -119,19 +119,19 @@ void Grid::clearPath() {
 void Grid::reset() {
     float MAX = std::numeric_limits<float>::max();
     
-    for (const auto& row : this->_matrix) {
-        for (const auto& node : row) {
+    for (const auto& col : this->_matrix) {
+        for (const auto& node : col) {
             node->setState(State::EMPTY);
             node->setParent(nullptr);
             node->setGCost(MAX);
-            node->setHCost(MAX);
+            node->setHCost(0.0);
         }
     }
 
     this->_startNode = this->_matrix[0][0].get();
     this->_startNode->setState(State::START);
 
-    this->_endNode = this->_matrix[this->_rows - 1][this->_cols - 1].get();
+    this->_endNode = this->_matrix[this->_cols - 1][this->_rows - 1].get();
     this->_endNode->setState(State::END);
 
     this->_shouldUpdatePath = false;
@@ -182,8 +182,8 @@ void Grid::update() {
 
 void Grid::draw() const {
     BeginMode2D(cameraController.get());
-        for (auto& row : this->_matrix) {
-            for (auto& node : row) node->draw();
+        for (const auto& col : this->_matrix) {
+            for (const auto& node : col) node->draw();
         }
     EndMode2D();
 }
