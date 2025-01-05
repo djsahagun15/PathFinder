@@ -15,13 +15,7 @@ public:
     bool isSearchComplete() override;
 
 private:
-    struct CompareNode {
-        bool operator()(Node* lhs, Node* rhs) const {
-            return lhs->getFCost() > rhs->getFCost();
-        }
-    };
-
-    std::priority_queue<Node*, std::vector<Node*>, CompareNode> _queue;
+    std::vector<Node*> _openSet;
 };
 
 

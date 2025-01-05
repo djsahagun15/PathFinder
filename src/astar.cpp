@@ -1,6 +1,7 @@
 #include "astar.hpp"
 
 #include <queue>
+#include <algorithm>
 
 
 AStar::AStar(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
@@ -10,12 +11,12 @@ void AStar::findPath(Node* start, Node* end, float speed) {
     static int added = 0;
 
     if (this->_isFirstIter) {
-        while (!this->_queue.empty()) this->_queue.pop();
+        this->_openSet.clear();
         
         start->setGCost(0.0f);
         start->setHCost(end);
 
-        this->_queue.push(start);
+        this->_openSet.push_back(start);
         added++;
 
         this->_isFirstIter = false;
@@ -25,15 +26,22 @@ void AStar::findPath(Node* start, Node* end, float speed) {
     added = 0;
     
     do {
-        if (this->_queue.empty()) {
+        if (this->_openSet.empty()) {
             this->_isFirstIter = true;
 
             added = 0;
             break;
         }
+
+        auto lowest = this->_openSet.begin();
+        for (auto it = lowest + 1; it != this->_openSet.end(); it++) {
+            if ((*it)->getFCost() <= (*lowest)->getFCost()) {
+                if ((*it)->getHCost() < (*lowest)->getHCost()) lowest = it;
+            }
+        }
         
-        Node* current = this->_queue.top();
-        this->_queue.pop();
+        Node* current = *lowest;
+        this->_openSet.erase(lowest);
 
         State currentState = current->getState();
         current->setState(currentState, true);
@@ -51,16 +59,17 @@ void AStar::findPath(Node* start, Node* end, float speed) {
             State neighborState = neighbor->getState();
 
             if (neighborState == State::WALL || neighbor->isVisited()) continue;
+
+            bool inOpenSet = std::find(this->_openSet.begin(), this->_openSet.end(), neighbor) != this->_openSet.end();
             
             float gCost = current->getGCost() + current->getDistance(neighbor);
 
-            if (gCost < neighbor->getGCost()) {
-                neighbor->setState(neighborState, true);
+            if (gCost < neighbor->getGCost() || !inOpenSet) {
                 neighbor->setGCost(gCost);
                 neighbor->setHCost(end);
                 neighbor->setParent(current);
 
-                this->_queue.push(neighbor);
+                if (!inOpenSet) this->_openSet.push_back(neighbor);
 
                 added++;
             }
@@ -71,10 +80,10 @@ void AStar::findPath(Node* start, Node* end, float speed) {
 
 void AStar::reset() {
     this->_isFirstIter = true;
-    while (!this->_queue.empty()) this->_queue.pop();
+    this->_openSet.clear();
 }
 
 
 bool AStar::isSearchComplete() {
-    return this->_queue.empty();
+    return this->_openSet.empty();
 }
