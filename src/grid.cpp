@@ -9,16 +9,21 @@ extern CameraController cameraController;
 
 
 Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _shouldUpdatePath(false) {
+    const int WINW = GetScreenWidth(), WINH = GetScreenHeight();
+    
+    this->_nodeSize = std::min(static_cast<float>(WINW / cols - 1), 
+                               static_cast<float>(WINH / rows - 1));
+    
     Vector2 offset {
-        (GetScreenWidth() - cols * NODE_SIZE) / 2.0f,
-        (GetScreenHeight() - rows * NODE_SIZE) / 2.0f
+        (WINW - cols * this->_nodeSize) / 2.0f,
+        (WINH - rows * this->_nodeSize) / 2.0f
     };
     
     this->_rect = {
         offset.x + 1.0f,
         offset.y + 1.0f,
-        cols * NODE_SIZE + 1.0f,
-        rows * NODE_SIZE + 1.0f
+        cols * this->_nodeSize + 1.0f,
+        rows * this->_nodeSize + 1.0f
     };
     
     this->_matrix.resize(cols);
@@ -26,10 +31,10 @@ Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _sh
         this->_matrix[col].resize(rows);
         for (int row = 0; row < rows; row++) {
             Rectangle nRect {
-                offset.x + col * NODE_SIZE + 1.0f,
-                offset.y + row * NODE_SIZE + 1.0f,
-                NODE_SIZE + 1.0f, 
-                NODE_SIZE + 1.0f
+                offset.x + col * this->_nodeSize + 1.0f,
+                offset.y + row * this->_nodeSize + 1.0f,
+                this->_nodeSize + 1.0f, 
+                this->_nodeSize + 1.0f
             };
             this->_matrix[col][row] = std::make_unique<Node>(nRect, col, row);
         }
@@ -51,14 +56,14 @@ bool Grid::isMouseInRect(Vector2 mouse) const {
 
 Node* Grid::getNode(Vector2 mouse) const {
     Vector2 offset {
-        (GetScreenWidth() - this->_cols * NODE_SIZE) / 2.0f + 1,
-        (GetScreenHeight() - this->_rows * NODE_SIZE) / 2.0f + 1
+        (GetScreenWidth() - this->_cols * this->_nodeSize) / 2.0f,
+        (GetScreenHeight() - this->_rows * this->_nodeSize) / 2.0f
     };
     mouse.x -= offset.x;
     mouse.y -= offset.y;
     
-    unsigned int x = mouse.x / NODE_SIZE;
-    unsigned int y = mouse.y / NODE_SIZE;
+    unsigned int x = mouse.x / this->_nodeSize;
+    unsigned int y = mouse.y / this->_nodeSize;
 
     x = std::max(std::min(x, this->_cols - 1), 0U);
     y = std::max(std::min(y, this->_rows - 1), 0U);
@@ -143,7 +148,7 @@ void Grid::update() {
     static Node* prevSelectedNode = nullptr;
     
     Vector2 mouse = cameraController.getMouseWorldPos();
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && this->isMouseInRect(mouse)) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && isMouseInRect(mouse)) {
         Node* selectedNode = this->getNode(mouse);
 
         if (selectedNode == prevSelectedNode) return;

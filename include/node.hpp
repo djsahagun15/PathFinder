@@ -4,8 +4,6 @@
 #include <raylib.h>
 #include <memory>
 
-#define NODE_SIZE   20.0f
-
 
 enum State { NONE, START, END, PATH, EMPTY, WALL };
 

@@ -40,6 +40,8 @@ private:
     
     unsigned int _cols, _rows;
 
+    float _nodeSize;
+
     Rectangle _rect;
 
     friend class PathFinder;
