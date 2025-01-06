@@ -9,7 +9,7 @@ CameraController cameraController;
 
 
 PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
-    InitWindow(700, 700, "PathFinder");
+    InitWindow(1280, 720, "PathFinder");
     SetTargetFPS(60);
 
     this->_grid = std::make_shared<Grid>(cols, rows);
