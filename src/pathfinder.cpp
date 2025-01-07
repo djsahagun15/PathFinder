@@ -41,7 +41,7 @@ void PathFinder::run() {
         while (!WindowShouldClose()) {
             this->update();
 
-            cameraController.update();
+            cameraController.update(this->_grid.get());
             
             BeginDrawing();
                 ClearBackground(LIGHTGRAY);

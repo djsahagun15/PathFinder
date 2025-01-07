@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 
+class Grid;
 
 class CameraController : Camera2D {
 public:
@@ -11,7 +12,7 @@ public:
     Vector2 getMouseWorldPos() const;
     Camera2D get() const;
 
-    void update();
+    void update(const Grid* grid);
 };
 
 
