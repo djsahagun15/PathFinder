@@ -55,18 +55,14 @@ bool Grid::isMouseInRect(Vector2 mouse) const {
 
 
 Node* Grid::getNode(Vector2 mouse) const {
-    Vector2 offset {
-        (GetScreenWidth() - this->_cols * this->_nodeSize) / 2.0f,
-        (GetScreenHeight() - this->_rows * this->_nodeSize) / 2.0f
-    };
-    mouse.x -= offset.x;
-    mouse.y -= offset.y;
+    mouse.x -= this->_rect.x;
+    mouse.y -= this->_rect.y;
     
     unsigned int x = mouse.x / this->_nodeSize;
     unsigned int y = mouse.y / this->_nodeSize;
 
-    x = std::max(std::min(x, this->_cols - 1), 0U);
-    y = std::max(std::min(y, this->_rows - 1), 0U);
+    x = std::clamp(x, 0U, this->_cols - 1);
+    y = std::clamp(y, 0U, this->_rows - 1);
     
     return this->_matrix[x][y].get();
 }
