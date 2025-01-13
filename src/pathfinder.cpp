@@ -4,6 +4,8 @@
 #include "dijkstra.hpp"
 #include "astar.hpp"
 
+#include "control_panel.hpp"
+
 
 CameraController cameraController;
 
@@ -14,16 +16,30 @@ PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
 
     this->_grid = std::make_shared<Grid>(cols, rows);
 
-    this->_BFS = std::make_shared<BFS>(this->_grid);
-    this->_Dijkstra = std::make_shared<Dijkstra>(this->_grid);
-    this->_AStar = std::make_shared<AStar>(this->_grid);
+    this->_algorithms.emplace_back(std::make_shared<BFS>(this->_grid));
+    this->_algorithms.emplace_back(std::make_shared<Dijkstra>(this->_grid));
+    this->_algorithms.emplace_back(std::make_shared<AStar>(this->_grid));
 
     this->_isCurrentlySearching = false;
+
+    this->_panel = std::make_unique<ControlPanel>(this);
 }
 
 
 PathFinder::~PathFinder() {
     CloseWindow();
+}
+
+
+void PathFinder::startSolver(int algorithm) {
+    if (this->_isCurrentlySearching) return;
+
+    this->clearPath();
+
+    this->_selectedAlgorithm = this->_algorithms[algorithm];
+    this->_isCurrentlySearching = true;
+
+    this->_isSolvedOnce = false;
 }
 
 
@@ -41,6 +57,13 @@ void PathFinder::run() {
         while (!WindowShouldClose()) {
             this->update();
 
+            // static bool shouldUpdateCamera = false;
+            // if ((!shouldUpdateCamera && IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) || GetMouseWheelMove() != 0) {
+            //     shouldUpdateCamera = !this->_panel->isMouseInRect();
+            // }
+            // else if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) shouldUpdateCamera = false;
+
+            // if (shouldUpdateCamera) 
             cameraController.update(this->_grid.get());
             
             BeginDrawing();
@@ -69,55 +92,29 @@ void PathFinder::clearPath() {
 
 
 void PathFinder::update() {
-    static bool isSolvedOnce = false;
-
     if (IsKeyPressed(KEY_R)) {
         this->reset();
         
-        isSolvedOnce = false;
+        this->_isSolvedOnce = false;
     } else if (IsKeyPressed(KEY_C)) {
         this->clearPath();
         
-        isSolvedOnce = false;
+        this->_isSolvedOnce = false;
     }
 
-    if (isSolvedOnce && this->_grid->_shouldUpdatePath) {
+    if (this->_isSolvedOnce && this->_grid->_shouldUpdatePath) {
         this->clearPath();
         this->_selectedAlgorithm->findPath(this->_grid->_startNode, this->_grid->_endNode);
     }
 
-    if (!this->_isCurrentlySearching) {
-        this->_grid->update();
-
-        if (IsKeyPressed(KEY_ONE)) {
-            this->clearPath();
-            
-            this->_selectedAlgorithm = this->_BFS;
-            this->_isCurrentlySearching = true;
-
-            isSolvedOnce = false;
-        } else if (IsKeyPressed(KEY_TWO)) {
-            this->clearPath();
-
-            this->_selectedAlgorithm = this->_Dijkstra;
-            this->_isCurrentlySearching = true;
-
-            isSolvedOnce = false;
-        } else if (IsKeyPressed(KEY_THREE)) {
-            this->clearPath();
-
-            this->_selectedAlgorithm = this->_AStar;
-            this->_isCurrentlySearching = true;
-
-            isSolvedOnce = false;
-        }
-    } else {
-        this->_selectedAlgorithm->findPath(this->_grid->_startNode, this->_grid->_endNode, 1.0f);
+    if (!this->_isCurrentlySearching) this->_grid->update();
+    else {
+        this->_selectedAlgorithm->findPath(this->_grid->_startNode, this->_grid->_endNode, this->_panel->getAnimSpeed());
 
         if (this->_selectedAlgorithm->isSearchComplete()) {
             this->_isCurrentlySearching = false;
 
-            isSolvedOnce = true;
+            this->_isSolvedOnce = true;
         }
     }
 }
@@ -125,4 +122,5 @@ void PathFinder::update() {
 
 void PathFinder::draw() const {
     this->_grid->draw();
+    this->_panel->draw();
 }

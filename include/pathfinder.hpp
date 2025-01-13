@@ -3,14 +3,18 @@
 
 #include "grid.hpp"
 #include "pathfinding_algorithm.hpp"
+#include "control_panel.hpp"
 
 #include <functional>
+#include <vector>
 
 
 class PathFinder {
 public:
     PathFinder(unsigned int cols, unsigned int rows);
     ~PathFinder();
+
+    void startSolver(int algorithm);
 
     void run();
 
@@ -23,13 +27,14 @@ private:
 
     std::shared_ptr<Grid> _grid;
 
-    std::shared_ptr<PathfindingAlgorithm> _BFS;
-    std::shared_ptr<PathfindingAlgorithm> _Dijkstra;
-    std::shared_ptr<PathfindingAlgorithm> _AStar;
+    std::vector<std::shared_ptr<PathfindingAlgorithm>> _algorithms;
 
     std::shared_ptr<PathfindingAlgorithm> _selectedAlgorithm;
 
     bool _isCurrentlySearching;
+    bool _isSolvedOnce;
+
+    std::unique_ptr<ControlPanel> _panel;
 };
 
 

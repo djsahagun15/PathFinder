@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(SOURCES
     ${CMAKE_SOURCE_DIR}/src/node.cpp
     ${CMAKE_SOURCE_DIR}/src/grid.cpp
+    ${CMAKE_SOURCE_DIR}/src/control_panel.cpp
     ${CMAKE_SOURCE_DIR}/src/camera.cpp
     ${CMAKE_SOURCE_DIR}/src/pathfinding_algorithm.cpp
     ${CMAKE_SOURCE_DIR}/src/bfs.cpp
@@ -30,6 +31,16 @@ FetchContent_Declare(
 
 # Make sure raylib is available and build it if needed
 FetchContent_MakeAvailable(raylib)
+
+# Fetch raylib from GitHub repository
+FetchContent_Declare(
+    raygui
+    GIT_REPOSITORY https://github.com/raysan5/raygui.git
+    GIT_TAG master  # You can specify a commit hash or a release tag here if you prefer
+)
+
+# Make sure raylib is available and build it if needed
+FetchContent_MakeAvailable(raygui)
 
 # Add include directories
 include_directories(

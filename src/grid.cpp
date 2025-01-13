@@ -9,7 +9,7 @@ extern CameraController cameraController;
 
 
 Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _shouldUpdatePath(false) {
-    const int WINW = GetScreenWidth(), WINH = GetScreenHeight();
+    const int WINW = GetScreenWidth() - 400, WINH = GetScreenHeight();
     
     this->_nodeSize = std::min(static_cast<float>(WINW / cols - 1), 
                                static_cast<float>(WINH / rows - 1));
