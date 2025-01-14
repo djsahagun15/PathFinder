@@ -10,6 +10,8 @@ public:
     Grid(unsigned int cols, unsigned int rows);
     ~Grid() = default;
 
+    void resize(unsigned int cols, unsigned int rows);
+
     float getWidth() const;
     float getHeight() const;
 

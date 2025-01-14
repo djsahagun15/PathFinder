@@ -11,6 +11,8 @@ class Node {
 public:
     Node(Rectangle rect, int x, int y);
 
+    void setRect(Rectangle rect);
+
     float getDistance(Node* other) const;
 
     State getState() const;

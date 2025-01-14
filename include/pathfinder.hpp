@@ -17,11 +17,16 @@ public:
     void startSolver(int algorithm);
     void toggleSolver();
 
+    void resize(unsigned int cols, unsigned int rows);
+
     void reset();
     void clearPath();
 
     bool isSearching() const;
     bool isSearchPaused() const;
+
+    unsigned int getCols() const;
+    unsigned int getRows() const;
 
     void run();
 

@@ -26,6 +26,15 @@ _parent(nullptr) {
 }
 
 
+void Node::setRect(Rectangle rect) {
+    this->_rect = rect;
+    this->_center = {
+        rect.x + rect.width / 2.0f,
+        rect.y + rect.height / 2.0f
+    };
+}
+
+
 float Node::getDistance(Node* other) const {
     return manhattanDistance(this->_center, other->_center);
 }

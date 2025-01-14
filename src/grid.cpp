@@ -8,7 +8,21 @@
 extern CameraController cameraController;
 
 
-Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _shouldUpdatePath(false) {
+Grid::Grid(unsigned int cols, unsigned int rows) : _cols(0), _rows(0), _shouldUpdatePath(false) {
+    this->resize(cols, rows);
+    
+    this->_startNode = this->_matrix[0][0].get();
+    this->_startNode->setState(State::START);
+
+    this->_endNode = this->_matrix[cols - 1][rows - 1].get();
+    this->_endNode->setState(State::END);
+}
+
+
+#include <iostream>
+void Grid::resize(unsigned int cols, unsigned int rows) {
+    if (cols == this->_cols && rows == this->_rows) return;
+
     const int WINW = GetScreenWidth() - 400, WINH = GetScreenHeight();
     
     this->_nodeSize = std::min(static_cast<float>(WINW / cols - 1), 
@@ -25,26 +39,40 @@ Grid::Grid(unsigned int cols, unsigned int rows) : _cols(cols), _rows(rows), _sh
         cols * this->_nodeSize + 1.0f,
         rows * this->_nodeSize + 1.0f
     };
-    
-    this->_matrix.resize(cols);
-    for (int col = 0; col < cols; col++) {
-        this->_matrix[col].resize(rows);
-        for (int row = 0; row < rows; row++) {
-            Rectangle nRect {
-                offset.x + col * this->_nodeSize + 1.0f,
-                offset.y + row * this->_nodeSize + 1.0f,
-                this->_nodeSize + 1.0f, 
-                this->_nodeSize + 1.0f
-            };
-            this->_matrix[col][row] = std::make_unique<Node>(nRect, col, row);
+
+    if (cols > this->_matrix.size() || rows > this->_matrix[0].size()) {
+        this->_matrix.resize(cols);
+        for (int col = 0; col < cols; col++) {
+            this->_matrix[col].resize(rows);
+            for (int row = 0; row < rows; row++) {
+                Rectangle nRect {
+                    offset.x + col * this->_nodeSize + 1.0f,
+                    offset.y + row * this->_nodeSize + 1.0f,
+                    this->_nodeSize + 1.0f,
+                    this->_nodeSize + 1.0f
+                };
+
+                if (col >= this->_cols || row >= this->_rows) this->_matrix[col][row] = std::make_unique<Node>(nRect, col, row);
+                else this->_matrix[col][row]->setRect(nRect);
+            }
+        }
+    } else {
+        for (int col = 0; col < cols; col++) {
+            for (int row = 0; row < rows; row++) {
+                Rectangle nRect {
+                    offset.x + col * this->_nodeSize + 1.0f,
+                    offset.y + row * this->_nodeSize + 1.0f,
+                    this->_nodeSize + 1.0f,
+                    this->_nodeSize + 1.0f
+                };
+
+                this->_matrix[col][row]->setRect(nRect);
+            }
         }
     }
-    
-    this->_startNode = this->_matrix[0][0].get();
-    this->_startNode->setState(State::START);
 
-    this->_endNode = this->_matrix[cols - 1][rows - 1].get();
-    this->_endNode->setState(State::END);
+    this->_cols = cols;
+    this->_rows = rows;
 }
 
 
@@ -183,8 +211,13 @@ void Grid::update() {
 
 void Grid::draw() const {
     BeginMode2D(cameraController.get());
-        for (const auto& col : this->_matrix) {
-            for (const auto& node : col) node->draw();
+        // for (const auto& col : this->_matrix) {
+        //     for (const auto& node : col) node->draw();
+        // }
+        for (int col = 0; col < this->_cols; col++) {
+            for (int row = 0; row < this->_rows; row++) {
+                this->_matrix[col][row]->draw();
+            }
         }
     EndMode2D();
 }

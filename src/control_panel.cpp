@@ -15,7 +15,7 @@ float ControlPanel::_animationSpeed = 0.0f;
 ControlPanel::ControlPanel(PathFinder* pf) : _pf(pf) {
     this->_rect = {
         static_cast<float>(GetScreenWidth() - 395.0f), 5.0f,
-        390.0f, 230.0f
+        390.0f, 320.0f
     };
 }
 
@@ -101,6 +101,34 @@ void ControlPanel::draw() const {
 
     if (GuiButton((Rectangle){ this->_rect.x + 30.0f, this->_rect.y + 180.0f, 160.0f, 30.0f }, "#113#Clear Path")) this->_pf->clearPath();
     if (GuiButton((Rectangle){ this->_rect.x + 200.0f, this->_rect.y + 180.0f, 160.0f, 30.0f }, "#211#Reset")) this->_pf->reset();
+
+
+    static int cols = static_cast<int>(this->_pf->getCols());
+    static int rows = static_cast<int>(this->_pf->getRows());
+
+    static int currentCols = cols;
+    static int currentRows = rows;
+
+    static bool gridResizeEditMode1 = false;
+    static bool gridResizeEditMode2 = false;
+    
+    GuiDrawText("Grid Size", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 240.0f, 370.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
+
+    if (GuiValueBox((Rectangle){ this->_rect.x + 106.0f, this->_rect.y + 270.0f, 80.0f, 30.0f }, nullptr, &cols, 10, 100, gridResizeEditMode1)) {
+        gridResizeEditMode1 = !gridResizeEditMode1;
+        if (cols != currentCols) {
+            this->_pf->resize(cols, rows);
+            currentCols = cols;
+        }
+    }
+
+    if (GuiValueBox((Rectangle){ this->_rect.x + 202.0f, this->_rect.y + 270.0f, 80.0f, 30.0f }, "X ", &rows, 10, 100, gridResizeEditMode2)) {
+        gridResizeEditMode2 = !gridResizeEditMode2;
+        if (rows != currentRows) {
+            this->_pf->resize(cols, rows);
+            currentRows = rows;
+        }
+    }
 
     if (GuiDropdownBox((Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 60.0f, 275.0f, 25.0f }, 
         "Breadth-First Search;Dijkstra's Algorithm; A* Algorithm", &selectedAlgo, algoSelectionEditMode)) algoSelectionEditMode = !algoSelectionEditMode;

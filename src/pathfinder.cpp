@@ -33,6 +33,12 @@ PathFinder::~PathFinder() {
 }
 
 
+void PathFinder::resize(unsigned int cols, unsigned int rows) {
+    this->_grid->resize(cols, rows);
+    this->reset();
+}
+
+
 void PathFinder::startSolver(int algorithm) {
     if (this->_isSearching) return;
 
@@ -53,6 +59,12 @@ bool PathFinder::isSearching() const { return this->_isSearching; }
 
 
 bool PathFinder::isSearchPaused() const { return this->_isPaused; }
+
+
+unsigned int PathFinder::getCols() const { return this->_grid->getColCount(); }
+
+
+unsigned int PathFinder::getRows() const { return this->_grid->getRowCount(); }
 
 
 void PathFinder::run() {
