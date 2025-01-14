@@ -15,7 +15,7 @@ float ControlPanel::_animationSpeed = 0.0f;
 ControlPanel::ControlPanel(PathFinder* pf) : _pf(pf) {
     this->_rect = {
         static_cast<float>(GetScreenWidth() - 395.0f), 5.0f,
-        390.0f, 180.0f
+        390.0f, 230.0f
     };
 }
 
@@ -47,8 +47,18 @@ void ControlPanel::draw() const {
 
     GuiDrawText("Pathfinding Algorithm", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 30.0f, 380.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
 
-    if (GuiButton((Rectangle){ this->_rect.x + 300.0f, this->_rect.y + 60.0f, 70.0f, 25.0f }, "Solve")) {
-        this->_pf->startSolver(selectedAlgo);
+
+    bool isSearching = this->_pf->isSearching();
+    bool isPaused = this->_pf->isSearchPaused();
+
+    if (!isSearching && !isPaused) {
+        if (GuiButton((Rectangle){ this->_rect.x + 300.0f, this->_rect.y + 60.0f, 70.0f, 25.0f }, "#131#Solve")) {
+            this->_pf->startSolver(selectedAlgo);
+        }
+    } else {
+        if (GuiButton((Rectangle){ this->_rect.x + 300.0f, this->_rect.y + 60.0f, 70.0f, 25.0f }, isPaused ? "#131#Resume" : "#132#Pause")) {
+            this->_pf->toggleSolver();
+        }
     }
 
     static bool isChecked = false;
@@ -88,6 +98,10 @@ void ControlPanel::draw() const {
 
 
     GuiSetState(STATE_NORMAL);
+
+    if (GuiButton((Rectangle){ this->_rect.x + 30.0f, this->_rect.y + 180.0f, 160.0f, 30.0f }, "#113#Clear Path")) this->_pf->clearPath();
+    if (GuiButton((Rectangle){ this->_rect.x + 200.0f, this->_rect.y + 180.0f, 160.0f, 30.0f }, "#211#Reset")) this->_pf->reset();
+
     if (GuiDropdownBox((Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 60.0f, 275.0f, 25.0f }, 
         "Breadth-First Search;Dijkstra's Algorithm; A* Algorithm", &selectedAlgo, algoSelectionEditMode)) algoSelectionEditMode = !algoSelectionEditMode;
 }

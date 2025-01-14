@@ -15,6 +15,13 @@ public:
     ~PathFinder();
 
     void startSolver(int algorithm);
+    void toggleSolver();
+
+    void reset();
+    void clearPath();
+
+    bool isSearching() const;
+    bool isSearchPaused() const;
 
     void run();
 
@@ -22,16 +29,14 @@ private:
     void update();
     void draw() const;
 
-    void reset();
-    void clearPath();
-
     std::shared_ptr<Grid> _grid;
 
     std::vector<std::shared_ptr<PathfindingAlgorithm>> _algorithms;
 
     std::shared_ptr<PathfindingAlgorithm> _selectedAlgorithm;
 
-    bool _isCurrentlySearching;
+    bool _isPaused;
+    bool _isSearching;
     bool _isSolvedOnce;
 
     std::unique_ptr<ControlPanel> _panel;

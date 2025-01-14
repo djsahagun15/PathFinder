@@ -11,6 +11,7 @@ void BFS::findPath(Node* start, Node* end, float speed) {
     static int added = 0;
 
     if (this->_isFirstIter) {
+        added = 0;
         while (!this->_queue.empty()) this->_queue.pop();
         
         this->_queue.push(start);

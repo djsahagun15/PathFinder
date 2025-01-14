@@ -11,6 +11,7 @@ void AStar::findPath(Node* start, Node* end, float speed) {
     static int added = 0;
 
     if (this->_isFirstIter) {
+        added = 0;
         this->_openSet.clear();
         
         start->setGCost(0.0f);

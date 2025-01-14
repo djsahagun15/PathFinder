@@ -10,6 +10,7 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
     static int added = 0;
 
     if (this->_isFirstIter) {
+        added = 0;
         while (!this->_queue.empty()) this->_queue.pop();
         
         start->setGCost(0.0f);

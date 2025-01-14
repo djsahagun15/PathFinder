@@ -20,7 +20,9 @@ PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
     this->_algorithms.emplace_back(std::make_shared<Dijkstra>(this->_grid));
     this->_algorithms.emplace_back(std::make_shared<AStar>(this->_grid));
 
-    this->_isCurrentlySearching = false;
+    this->_isSearching = false;
+    this->_isSolvedOnce = false;
+    this->_isPaused = false;
 
     this->_panel = std::make_unique<ControlPanel>(this);
 }
@@ -32,15 +34,25 @@ PathFinder::~PathFinder() {
 
 
 void PathFinder::startSolver(int algorithm) {
-    if (this->_isCurrentlySearching) return;
+    if (this->_isSearching) return;
 
     this->clearPath();
 
     this->_selectedAlgorithm = this->_algorithms[algorithm];
-    this->_isCurrentlySearching = true;
+    this->_isSearching = true;
+    this->_isPaused = false;
 
     this->_isSolvedOnce = false;
 }
+
+
+void PathFinder::toggleSolver() { this->_isPaused ^= true; }
+
+
+bool PathFinder::isSearching() const { return this->_isSearching; }
+
+
+bool PathFinder::isSearchPaused() const { return this->_isPaused; }
 
 
 void PathFinder::run() {
@@ -77,44 +89,42 @@ void PathFinder::run() {
 
 void PathFinder::reset() {
     this->_grid->reset();
-    if (this->_selectedAlgorithm && this->_isCurrentlySearching) {
+    if (this->_selectedAlgorithm) {
         this->_selectedAlgorithm->reset();
     }
-    this->_selectedAlgorithm = nullptr;
-    this->_isCurrentlySearching = false;
+    this->_isSearching = false;
+    this->_isSolvedOnce = false;
+    this->_isPaused = false;
 }
 
 
 void PathFinder::clearPath() {
     this->_grid->clearPath();
-    this->_isCurrentlySearching = false;
+    if (this->_selectedAlgorithm) {
+        this->_selectedAlgorithm->reset();
+    }
+    this->_isSearching = false;
+    this->_isPaused = false;
 }
 
 
 void PathFinder::update() {
-    if (IsKeyPressed(KEY_R)) {
-        this->reset();
-        
-        this->_isSolvedOnce = false;
-    } else if (IsKeyPressed(KEY_C)) {
-        this->clearPath();
-        
-        this->_isSolvedOnce = false;
-    }
+    if (IsKeyPressed(KEY_R)) this->reset();
+    else if (IsKeyPressed(KEY_C)) this->clearPath();
 
     if (this->_isSolvedOnce && this->_grid->_shouldUpdatePath) {
         this->clearPath();
         this->_selectedAlgorithm->findPath(this->_grid->_startNode, this->_grid->_endNode);
     }
 
-    if (!this->_isCurrentlySearching) this->_grid->update();
-    else {
+    if (!this->_isSearching && !this->_isPaused) this->_grid->update();
+    else if (!this->_isPaused) {
         this->_selectedAlgorithm->findPath(this->_grid->_startNode, this->_grid->_endNode, this->_panel->getAnimSpeed());
 
         if (this->_selectedAlgorithm->isSearchComplete()) {
-            this->_isCurrentlySearching = false;
-
+            this->_isSearching = false;
             this->_isSolvedOnce = true;
+            this->_isPaused = false;
         }
     }
 }
