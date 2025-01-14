@@ -17,7 +17,7 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
    - ~~Highlight the discovered path.~~
  
 - **Controls**
-   - Add buttons for ~~starting~~, and pausing/resuming algorithm process, and resetting grid.
+   - ~~Add buttons for starting, and pausing/resuming algorithm process, and resetting grid.~~
    - ~~Add process speed slider.~~
  
 - **Documentation**
