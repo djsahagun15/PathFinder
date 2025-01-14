@@ -96,15 +96,3 @@ add_custom_target(run
     DEPENDS ${PROJECT_NAME}
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
-
-# Add custom command to check if source files have changed
-add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/check_sources
-    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/check_sources
-    DEPENDS ${SOURCES}
-    COMMENT "Checking if source files have changed..."
-)
-
-# Add a dependency for 'check_sources' target
-add_custom_target(check_sources DEPENDS ${CMAKE_BINARY_DIR}/check_sources)
-add_dependencies(run check_sources)
