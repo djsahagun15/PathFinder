@@ -116,6 +116,7 @@ void PathFinder::clearPath() {
         this->_selectedAlgorithm->reset();
     }
     this->_isSearching = false;
+    this->_isSolvedOnce = false;
     this->_isPaused = false;
 }
 
@@ -127,6 +128,7 @@ void PathFinder::update() {
     if (this->_isSolvedOnce && this->_grid->_shouldUpdatePath) {
         this->clearPath();
         this->_selectedAlgorithm->findPath(this->_grid->_startNode, this->_grid->_endNode);
+        this->_isSolvedOnce = true;
     }
 
     if (!this->_isSearching && !this->_isPaused) this->_grid->update();
