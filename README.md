@@ -10,7 +10,7 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
    - ~~Implement A* Algorithm.~~
      
 - **Grid Features**
-   - Implement grid resizing.
+   - ~~Implement grid resizing.~~
  
 - **Visualizations**
    - ~~Visualize the step-by-step process of pathfinding.~~
