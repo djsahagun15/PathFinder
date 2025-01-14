@@ -17,8 +17,8 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
    - ~~Highlight the discovered path.~~
  
 - **Controls**
-   - Add buttons for starting, and pausing/resuming algorithm process, and resetting grid.
-   - Add process speed slider.
+   - Add buttons for ~~starting~~, and pausing/resuming algorithm process, and resetting grid.
+   - ~~Add process speed slider.~~
  
 - **Documentation**
    - Add comments in the source code.
@@ -38,9 +38,6 @@ PathFinder is an interactive tool for exploring and experimenting with popular p
 **Keyboard Controls:**
 - **R**     : Reset the grid to its initial state
 - **C**     : Clear the path
-- **1**     : Run Breadth-First Search
-- **2**     : Run Dijkstra's Algorithm
-- **3**     : Run A* Algorithm
 
 ## Prerequisites
    Before building the project, make sure you have the following installed in your system:
