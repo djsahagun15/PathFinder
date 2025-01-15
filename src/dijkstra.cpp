@@ -9,6 +9,7 @@ Dijkstra::Dijkstra(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
 void Dijkstra::findPath(Node* start, Node* end, float speed) {
     static int added = 0;
 
+    // Initialize on the first iteration
     if (this->_isFirstIter) {
         added = 0;
         while (!this->_queue.empty()) this->_queue.pop();
@@ -21,10 +22,12 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
         this->_isFirstIter = false;
     }
 
+    // Determine the maximum number of iterations for this step
     int maxIter = speed == 0.0f ? this->_grid->getColRowCount() : added * speed + 1;
     added = 0;
     
     do {
+        // If the queue is empty, the search is complete
         if (this->_queue.empty()) {
             this->_isFirstIter = true;
             
@@ -32,12 +35,14 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
             break;
         }
         
+        // Get the node with the smallest cost
         Node* current = this->_queue.top();
         this->_queue.pop();
 
         State currentState = current->getState();
         current->setState(currentState, true);
 
+        // If the end node is reached, trace the path and reset
         if (current == end) {
             this->tracePath(start, end);
             this->reset();
@@ -46,14 +51,17 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
             break;
         }
 
+        // Process each neighbor of the current node
         std::vector<Node*> neighbors = this->_grid->getNeighbors(current);
         for (Node* neighbor : neighbors) {
             State neighborState = neighbor->getState();
 
+            // Skip walls and visited nodes
             if (neighborState == State::WALL || neighbor->isVisited()) continue;
             
             float gCost = current->getGCost() + current->getDistance(neighbor);
 
+            // If a shorter path to the neighbor is found
             if (gCost < neighbor->getGCost()) {
                 neighbor->setState(neighborState, true);
                 neighbor->setGCost(gCost);

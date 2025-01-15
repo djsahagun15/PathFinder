@@ -4,52 +4,163 @@
 #include <raylib.h>
 #include <memory>
 
+/**
+ * @brief Represents the possible states of a node in the pathfinding grid
+ */
+enum State { 
+    NONE,   // Default state
+    START,  // Starting node
+    END,    // End/target node
+    PATH,   // Node is part of the found path
+    EMPTY,  // Traversable node
+    WALL    // Non-traversable obstacle
+};
 
-enum State { NONE, START, END, PATH, EMPTY, WALL };
-
+/**
+ * @brief Represents a single node in the pathfinding grid
+ * 
+ * This class implements functionality for A* pathfinding algorithm nodes,
+ * including position, state, and cost calculations.
+ */
 class Node {
 public:
+    /**
+     * @brief Constructs a node with given rectangle and grid coordinates
+     * @param rect Rectangle defining node's position and size
+     * @param x Grid x-coordinate
+     * @param y Grid y-coordinate
+     */
     Node(Rectangle rect, int x, int y);
 
+    /**
+     * @brief Updates the node's rectangle
+     * @param rect New rectangle dimensions
+     */
     void setRect(Rectangle rect);
 
+    /**
+     * @brief Calculates Euclidean distance to another node
+     * @param other Target node to calculate distance to
+     * @return Float distance between nodes
+     */
     float getDistance(Node* other) const;
 
+    /**
+     * @brief Gets current state of the node
+     * @return Current State enum value
+     */
     State getState() const;
+
+    /**
+     * @brief Checks if node has been visited during pathfinding
+     * @return True if visited, false otherwise
+     */
     bool isVisited() const;
+
+    /**
+     * @brief Sets node state and visited flag
+     * @param newState New state to set
+     * @param visited Optional visited flag
+     */
     void setState(State newState, bool visited = false);
 
+    /**
+     * @brief Gets node's x-coordinate in grid
+     * @return X-coordinate
+     */
     unsigned int getX() const;
+
+    /**
+     * @brief Gets node's y-coordinate in grid
+     * @return Y-coordinate
+     */
     unsigned int getY() const;
 
+    /**
+     * @brief Gets node's G cost (distance from start)
+     * @return G cost value
+     */
     float getGCost() const;
+
+    /**
+     * @brief Sets node's G cost
+     * @param gCost New G cost value
+     */
     void setGCost(float gCost);
 
+    /**
+     * @brief Gets node's H cost (heuristic distance to end)
+     * @return H cost value
+     */
     float getHCost() const;
+
+    /**
+     * @brief Sets node's H cost directly
+     * @param hCost New H cost value
+     */
     void setHCost(float hCost);
+
+    /**
+     * @brief Calculates and sets H cost based on end node
+     * @param endNode Target end node
+     */
     void setHCost(Node* endNode);
 
+    /**
+     * @brief Gets node's F cost (G cost + H cost)
+     * @return F cost value
+     */
     float getFCost() const;
 
+    /**
+     * @brief Gets node's parent in the path
+     * @return Pointer to parent node
+     */
     Node* getParent() const;
+
+    /**
+     * @brief Sets node's parent
+     * @param newParent Pointer to new parent node
+     */
     void setParent(Node* newParent);
 
+    /**
+     * @brief Draws the node using raylib
+     */
     void draw() const;
 
 private:
+    // Center point of node
     Vector2 _center;
-    Rectangle _rect;
-    int _x, _y;
     
-    State _state;
-    bool _isVisited;
+    // Rectangle defining node boundaries
+    Rectangle _rect;
+    
+    // Grid coordinates
+    int _x, _y;
 
+
+    // Current node state
+    State _state;
+
+    // Visited flag for pathfinding
+    bool _isVisited;
+    
+
+    // Cost from start node to this node
     float _gCost;
+
+    // Heuristic cost from this node to end node
     float _hCost;
+
+    // Total cost (G cost + H cost)
     float _fCost;
 
+
+    // Parent node in the path
     Node* _parent;
 
+    // Color of the node for drawing
     std::unique_ptr<Color> _color;
 };
 
