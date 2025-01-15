@@ -68,10 +68,18 @@ unsigned int PathFinder::getRows() const { return this->_grid->getRowCount(); }
 
 
 void PathFinder::run() {
+    static bool shouldUpdateCamera = false;
+
     #if defined(PLATFORM_WEB)
         this->update();
 
-        cameraController.update(this->_grid.get());
+        bool mouseRight = IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+        float wheelMove = GetMouseWheelMove();
+
+        if ((!shouldUpdateCamera && mouseRight || wheelMove != 0)) shouldUpdateCamera = !this->_panel->isMouseInRect();
+        else if (!mouseRight && wheelMove == 0) shouldUpdateCamera = false;
+
+        if (shouldUpdateCamera) cameraController.update(this->_grid.get());
 
         BeginDrawing();
             ClearBackground(LIGHTGRAY);
@@ -81,14 +89,13 @@ void PathFinder::run() {
         while (!WindowShouldClose()) {
             this->update();
 
-            // static bool shouldUpdateCamera = false;
-            // if ((!shouldUpdateCamera && IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) || GetMouseWheelMove() != 0) {
-            //     shouldUpdateCamera = !this->_panel->isMouseInRect();
-            // }
-            // else if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) shouldUpdateCamera = false;
+            bool mouseRight = IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+            float wheelMove = GetMouseWheelMove();
 
-            // if (shouldUpdateCamera) 
-            cameraController.update(this->_grid.get());
+            if ((!shouldUpdateCamera && mouseRight || wheelMove != 0)) shouldUpdateCamera = !this->_panel->isMouseInRect();
+            else if (!mouseRight && wheelMove == 0) shouldUpdateCamera = false;
+
+            if (shouldUpdateCamera) cameraController.update(this->_grid.get());
             
             BeginDrawing();
                 ClearBackground(LIGHTGRAY);
