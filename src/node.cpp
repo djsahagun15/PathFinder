@@ -47,11 +47,11 @@ void Node::setState(State state, bool visited) {
     
     this->_state = state;
     switch (this->_state) {
-        case START : { *this->_color = GREEN; }; break;
-        case END : { *this->_color = RED; }; break;
-        case PATH : { *this->_color = YELLOW; }; break;
-        case EMPTY : { *this->_color = this->_isVisited ? SKYBLUE : WHITE; }; break;
-        case WALL : { *this->_color = BLACK; }; break;
+        case START : { *this->_color = { 46, 204, 113, 255 }; }; break;
+        case END : { *this->_color = { 231, 76, 60, 255 }; }; break;
+        case PATH : { *this->_color = { 241, 196, 15, 255 }; }; break;
+        case EMPTY : { *this->_color = this->_isVisited ? (Color){ 52, 152, 219, 255 } : WHITE; }; break;
+        case WALL : { *this->_color = { 44, 62, 80, 255 }; }; break;
         case NONE :
         default: break;
     }

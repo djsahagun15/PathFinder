@@ -10,6 +10,8 @@
 // Initialize the camera controller
 CameraController cameraController;
 
+const Color BACKGROUND = (Color){ 52, 73, 94, 255 };
+
 
 // Constructor for PathFinder class
 PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
@@ -98,7 +100,7 @@ void PathFinder::run() {
         if (shouldUpdateCamera) cameraController.update(this->_grid.get());
 
         BeginDrawing();
-            ClearBackground(LIGHTGRAY);
+            ClearBackground(BACKGROUND);
             this->draw();
         EndDrawing();
     #else
@@ -116,7 +118,7 @@ void PathFinder::run() {
             if (shouldUpdateCamera) cameraController.update(this->_grid.get());
             
             BeginDrawing();
-                ClearBackground(LIGHTGRAY);
+                ClearBackground(BACKGROUND);
                 this->draw();
             EndDrawing();
         }
