@@ -8,7 +8,7 @@
  * @brief Represents the possible states of a node in the pathfinding grid
  */
 enum State { 
-    NONE,   // Default state
+    NONE,
     START,  // Starting node
     END,    // End/target node
     PATH,   // Node is part of the found path
@@ -62,7 +62,13 @@ public:
      * @param newState New state to set
      * @param visited Optional visited flag
      */
-    void setState(State newState, bool visited = false);
+    void setState(State newState);
+
+    /**
+     * @brief Sets visited flag for pathfinding
+     * @param visited New visited flag value
+     */
+    void setVisited(bool visited);
 
     /**
      * @brief Gets node's x-coordinate in grid

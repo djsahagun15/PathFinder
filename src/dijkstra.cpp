@@ -39,8 +39,11 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
         Node* current = this->_queue.top();
         this->_queue.pop();
 
+        if (current->isVisited()) continue;
+
         State currentState = current->getState();
-        current->setState(currentState, true);
+        current->setState(currentState);
+        current->setVisited(true);
 
         // If the end node is reached, trace the path and reset
         if (current == end) {
@@ -54,16 +57,13 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
         // Process each neighbor of the current node
         std::vector<Node*> neighbors = this->_grid->getNeighbors(current);
         for (Node* neighbor : neighbors) {
-            State neighborState = neighbor->getState();
-
             // Skip walls and visited nodes
-            if (neighborState == State::WALL || neighbor->isVisited()) continue;
+            if (neighbor->getState() == State::WALL || neighbor->isVisited()) continue;
             
             float gCost = current->getGCost() + current->getDistance(neighbor);
 
             // If a shorter path to the neighbor is found
             if (gCost < neighbor->getGCost()) {
-                neighbor->setState(neighborState, true);
                 neighbor->setGCost(gCost);
                 neighbor->setParent(current);
 

@@ -42,9 +42,7 @@ float Node::getDistance(Node* other) const {
 State Node::getState() const { return this->_state; }
 
 // Set the state of the node and update its color
-void Node::setState(State state, bool visited) {
-    this->_isVisited = visited;
-    
+void Node::setState(State state) {
     this->_state = state;
     switch (this->_state) {
         case START : { *this->_color = { 46, 204, 113, 255 }; }; break;
@@ -55,6 +53,11 @@ void Node::setState(State state, bool visited) {
         case NONE :
         default: break;
     }
+}
+
+void Node::setVisited(bool visited) {
+    this->_isVisited = visited;
+    this->setState(this->_state);
 }
 
 // Check if the node has been visited

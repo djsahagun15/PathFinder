@@ -50,7 +50,8 @@ void AStar::findPath(Node* start, Node* end, float speed) {
 
         // Mark the current node as visited
         State currentState = current->getState();
-        current->setState(currentState, true);
+        current->setState(currentState);
+        current->setVisited(true);
 
         // If the end node is reached, trace the path and reset
         if (current == end) {
@@ -64,10 +65,8 @@ void AStar::findPath(Node* start, Node* end, float speed) {
         // Process each neighbor of the current node
         std::vector<Node*> neighbors = this->_grid->getNeighbors(current);
         for (Node* neighbor : neighbors) {
-            State neighborState = neighbor->getState();
-
             // Skip walls and visited nodes
-            if (neighborState == State::WALL || neighbor->isVisited()) continue;
+            if (neighbor->getState() == State::WALL || neighbor->isVisited()) continue;
 
             bool inOpenSet = std::find(this->_openSet.begin(), this->_openSet.end(), neighbor) != this->_openSet.end();
             

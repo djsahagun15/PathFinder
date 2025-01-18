@@ -142,6 +142,7 @@ void Grid::clearPath() {
             if (nodeState == State::PATH) nodeState = State::EMPTY;
 
             node->setState(nodeState);
+            node->setVisited(false);
             node->setParent(nullptr);
             node->setGCost(MAX);
             node->setHCost(0.0);
@@ -158,6 +159,7 @@ void Grid::reset() {
     for (const auto& col : this->_matrix) {
         for (const auto& node : col) {
             node->setState(State::EMPTY);
+            node->setVisited(false);
             node->setParent(nullptr);
             node->setGCost(MAX);
             node->setHCost(0.0);
@@ -203,7 +205,7 @@ void Grid::update() {
             }
         }
         else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
-            selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState), selectedNode->isVisited());
+            selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
         }
 
         this->_shouldUpdatePath = true;

@@ -39,9 +39,12 @@ void BFS::findPath(Node* start, Node* end, float speed) {
         Node* current = this->_queue.front();
         this->_queue.pop();
 
+        if (current->isVisited()) continue;
+
         // Mark the current node as visited
         State currentState = current->getState();
-        current->setState(currentState, true);
+        current->setState(currentState);
+        current->setVisited(true);
 
         if (current == end) {
             // If the end node is reached, trace the path and reset
@@ -55,11 +58,7 @@ void BFS::findPath(Node* start, Node* end, float speed) {
         // Get the neighbors of the current node
         std::vector<Node*> neighbors = this->getNeighbors(current);
         for (Node* neighbor : neighbors) {
-            State neighborState = neighbor->getState();
-
-            if (neighborState != State::WALL && !neighbor->isVisited()) {
-                // If the neighbor is not a wall and not visited, mark it and add to the queue
-                neighbor->setState(neighborState, true);
+            if (neighbor->getState() != State::WALL && !neighbor->isVisited()) {
                 neighbor->setParent(current);
 
                 this->_queue.push(neighbor);
