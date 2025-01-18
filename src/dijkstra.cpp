@@ -39,10 +39,7 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
         Node* current = this->_queue.top();
         this->_queue.pop();
 
-        if (current->isVisited()) continue;
-
-        State currentState = current->getState();
-        current->setState(currentState);
+        // Mark the current node as visited
         current->setVisited(true);
 
         // If the end node is reached, trace the path and reset

@@ -49,8 +49,6 @@ void AStar::findPath(Node* start, Node* end, float speed) {
         this->_openSet.erase(lowest);
 
         // Mark the current node as visited
-        State currentState = current->getState();
-        current->setState(currentState);
         current->setVisited(true);
 
         // If the end node is reached, trace the path and reset

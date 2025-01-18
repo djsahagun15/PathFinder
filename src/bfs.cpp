@@ -14,6 +14,8 @@ void BFS::findPath(Node* start, Node* end, float speed) {
         // Reset the added counter and clear the queue for the first iteration
         added = 0;
         while (!this->_queue.empty()) this->_queue.pop();
+
+        start->setVisited(true);
         
         // Add the start node to the queue
         this->_queue.push(start);
@@ -39,13 +41,6 @@ void BFS::findPath(Node* start, Node* end, float speed) {
         Node* current = this->_queue.front();
         this->_queue.pop();
 
-        if (current->isVisited()) continue;
-
-        // Mark the current node as visited
-        State currentState = current->getState();
-        current->setState(currentState);
-        current->setVisited(true);
-
         if (current == end) {
             // If the end node is reached, trace the path and reset
             this->tracePath(start, end);
@@ -60,6 +55,7 @@ void BFS::findPath(Node* start, Node* end, float speed) {
         for (Node* neighbor : neighbors) {
             if (neighbor->getState() != State::WALL && !neighbor->isVisited()) {
                 neighbor->setParent(current);
+                neighbor->setVisited(true);
 
                 this->_queue.push(neighbor);
 
