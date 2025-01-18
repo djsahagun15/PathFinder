@@ -8,7 +8,8 @@
 Node::Node(Rectangle rect, int x, int y) : 
 _rect(rect),
 _x(x), _y(y), 
-_state(EMPTY), 
+_state(State::EMPTY),
+_terrain(TerrainType::AIR),
 _isVisited(false),
 _color(std::make_unique<Color>(WHITE)),
 _parent(nullptr) {
@@ -45,14 +46,35 @@ State Node::getState() const { return this->_state; }
 void Node::setState(State state) {
     this->_state = state;
     switch (this->_state) {
-        case START : { *this->_color = { 46, 204, 113, 255 }; }; break;
-        case END : { *this->_color = { 231, 76, 60, 255 }; }; break;
-        case PATH : { *this->_color = { 241, 196, 15, 255 }; }; break;
-        case EMPTY : { *this->_color = this->_isVisited ? (Color){ 52, 152, 219, 255 } : WHITE; }; break;
-        case WALL : { *this->_color = { 44, 62, 80, 255 }; }; break;
-        case NONE :
+        case State::START : { *this->_color = { 46, 204, 113, 255 }; }; break;
+        case State::END : { *this->_color = { 231, 76, 60, 255 }; }; break;
+        case State::EMPTY : { this->setTerrain(this->_terrain); }; break;
+        case State::WALL : { *this->_color = BLACK; }; break;
         default: break;
     }
+}
+
+void Node::setTerrain(TerrainType terrain) {
+    if (static_cast<int>(terrain) != 0) this->_state = State::EMPTY;
+    
+    this->_terrain = terrain;
+    switch (this->_terrain) {
+        case TerrainType::AIR : {
+            this->_state = State::EMPTY;
+            *this->_color = WHITE;
+        }; break;
+        case TerrainType::GRASS : { *this->_color = { 0, 140, 30, 255 }; }; break;
+        case TerrainType::SAND : { *this->_color = { 244, 164, 96, 255 }; }; break;
+        case TerrainType::STONE : { *this->_color = { 112, 128, 144, 255 }; }; break;
+        case TerrainType::MOUNTAIN : { *this->_color = {139, 137, 137, 255}; }; break;
+        case TerrainType::WATER : { *this->_color = {0, 191, 255, 255}; }; break;
+        default: {
+            this->_state = State::WALL;
+            *this->_color = BLACK;
+        }; break;
+    }
+
+    if (this->_isVisited) *this->_color = ColorAlphaBlend(*this->_color, { 0, 191, 255, 100 }, WHITE);
 }
 
 void Node::setVisited(bool visited) {
@@ -71,7 +93,7 @@ unsigned int Node::getY() const { return this->_y; }
 
 // Set the G cost and update the F cost
 void Node::setGCost(float gCost) {
-    this->_gCost = gCost;
+    this->_gCost = gCost * static_cast<float>(this->_terrain);
     this->_fCost = this->_gCost + this->_hCost;
 }
 
@@ -106,4 +128,8 @@ void Node::setParent(Node* newParent) { this->_parent = newParent; }
 void Node::draw() const {
     DrawRectangleRec(this->_rect, *this->_color);
     DrawRectangleLinesEx(this->_rect, 1.0f, DARKGRAY);
+
+    if (this->_state == State::PATH) {
+        DrawCircleV(this->_center, this->_rect.width * 0.25f, (Color){ 241, 196, 15, 255 });
+    }
 }

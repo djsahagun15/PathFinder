@@ -22,7 +22,7 @@ Grid::Grid(unsigned int cols, unsigned int rows) : _cols(0), _rows(0), _shouldUp
 void Grid::resize(unsigned int cols, unsigned int rows) {
     if (cols == this->_cols && rows == this->_rows) return;
 
-    const int WINW = GetScreenWidth() - 400, WINH = GetScreenHeight();
+    const int WINW = GetScreenWidth() - 450, WINH = GetScreenHeight();
     
     this->_nodeSize = std::min(static_cast<float>(WINW / cols - 1), 
                                static_cast<float>(WINH / rows - 1));
@@ -95,6 +95,8 @@ Node* Grid::getNode(Vector2 mouse) const {
     return this->_matrix[x][y].get();
 }
 
+void Grid::setNodeType(int type) { this->_selectedNodeType = static_cast<TerrainType>(type); }
+
 // Get grid width
 float Grid::getWidth() const { return this->_rect.width; };
 
@@ -159,6 +161,7 @@ void Grid::reset() {
     for (const auto& col : this->_matrix) {
         for (const auto& node : col) {
             node->setState(State::EMPTY);
+            node->setTerrain(TerrainType::AIR);
             node->setVisited(false);
             node->setParent(nullptr);
             node->setGCost(MAX);
@@ -205,7 +208,8 @@ void Grid::update() {
             }
         }
         else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
-            selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
+            // selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
+            selectedNode->setTerrain(this->_selectedNodeType);
         }
 
         this->_shouldUpdatePath = true;

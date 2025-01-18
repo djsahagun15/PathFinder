@@ -4,16 +4,39 @@
 #include <raylib.h>
 #include <memory>
 
+#include <array>
+
 /**
  * @brief Represents the possible states of a node in the pathfinding grid
  */
-enum State { 
+enum State {
     NONE,
     START,  // Starting node
     END,    // End/target node
     PATH,   // Node is part of the found path
     EMPTY,  // Traversable node
     WALL    // Non-traversable obstacle
+};
+
+/**
+ * @brief Represents the possible terrain types of a node in the pathfinding grid
+ */
+enum class TerrainType {
+    AIR = 1,     // Default terrain type
+    GRASS = 5,      // Grass terrain type
+    SAND = 10,      // Sand terrain type
+    STONE = 20,     // Forest terrain type
+    MOUNTAIN = 50,  // Mountain terrain type
+    WATER = 100,    // Water terrain type
+};
+
+constexpr std::array<TerrainType, 6> TERRAIN_TYPES = {
+    TerrainType::AIR,
+    TerrainType::GRASS,
+    TerrainType::SAND,
+    TerrainType::STONE,
+    TerrainType::MOUNTAIN,
+    TerrainType::WATER
 };
 
 /**
@@ -60,9 +83,16 @@ public:
     /**
      * @brief Sets node state and visited flag
      * @param newState New state to set
-     * @param visited Optional visited flag
      */
     void setState(State newState);
+
+    /**
+     * @brief Sets terrain type of the node
+     * @param terrain New terrain type
+     */
+    void setTerrain(TerrainType terrain);
+
+    TerrainType getTerrain() const { return this->_terrain; }
 
     /**
      * @brief Sets visited flag for pathfinding
@@ -148,6 +178,9 @@ private:
 
     // Current node state
     State _state;
+
+    // Terrain type of the node
+    TerrainType _terrain;
 
     // Visited flag for pathfinding
     bool _isVisited;

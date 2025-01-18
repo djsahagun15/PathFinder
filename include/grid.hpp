@@ -63,6 +63,12 @@ public:
     std::vector<Node*> getNeighbors(Node* node) const;
 
     /**
+     * @brief Sets the node type for the grid.
+     * @param nodeType The node type to set.
+     */
+    void setNodeType(int nodeType);
+
+    /**
      * @brief Checks if the path should be updated.
      * @return True if the path should be updated, false otherwise.
      */
@@ -117,6 +123,10 @@ private:
 
     // Ending node for pathfinding.
     Node* _endNode;
+
+
+    // Selected node type.
+    TerrainType _selectedNodeType;
 
 
     // Flag indicating whether the path should be updated.

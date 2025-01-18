@@ -5,19 +5,28 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <format>
 
 #include "pathfinder.hpp"
 
 
 float ControlPanel::_animationSpeed = 0.0f;
 
+int ControlPanel::_selectedNodeType = 0;
+
 
 ControlPanel::ControlPanel(PathFinder* pf) : _pf(pf) {
     // Initialize the control panel rectangle
     this->_rect = {
-        static_cast<float>(GetScreenWidth() - 395.0f), 5.0f,
-        390.0f, 320.0f
+        static_cast<float>(GetScreenWidth() - 445.0f), 5.0f,
+        440.0f, 400.0f
     };
+}
+
+
+int ControlPanel::getSelectedNodeType() const {
+    if (ControlPanel::_selectedNodeType == 0) return 0;
+    return static_cast<int>(TERRAIN_TYPES[ControlPanel::_selectedNodeType - 1]);
 }
 
 
@@ -40,6 +49,7 @@ bool ControlPanel::isMouseInRect() const {
 void ControlPanel::draw() const {
     // Load the default GUI style
     GuiLoadStyleDefault();
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 14);
 
     // Draw the control panel
     GuiPanel(this->_rect, "#140#PathFinder Controller");
@@ -47,12 +57,14 @@ void ControlPanel::draw() const {
     static int selectedAlgo = 0;
     static bool algoSelectionEditMode = false;
 
+    static bool nodeTypeSelectionEditMode = false;
+
     // Lock or unlock the GUI based on edit mode
-    if (algoSelectionEditMode) GuiLock();
+    if (algoSelectionEditMode || nodeTypeSelectionEditMode) GuiLock();
     else GuiUnlock();
 
     // Draw the pathfinding algorithm label
-    GuiDrawText("Pathfinding Algorithm", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 30.0f, 380.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
+    GuiDrawText("Pathfinding Algorithm", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 30.0f, this->_rect.width - 20.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
 
     // Check if the pathfinder is searching or paused
     bool isSearching = this->_pf->isSearching();
@@ -60,18 +72,18 @@ void ControlPanel::draw() const {
 
     // Draw the solve/resume/pause button based on the state
     if (!isSearching && !isPaused) {
-        if (GuiButton((Rectangle){ this->_rect.x + 300.0f, this->_rect.y + 60.0f, 70.0f, 25.0f }, "#131#Solve")) {
+        if (GuiButton((Rectangle){ this->_rect.x + 345.0f, this->_rect.y + 60.0f, 75.0f, 30.0f }, "#131#Solve")) {
             this->_pf->startSolver(selectedAlgo);
         }
     } else {
-        if (GuiButton((Rectangle){ this->_rect.x + 300.0f, this->_rect.y + 60.0f, 70.0f, 25.0f }, isPaused ? "#131#Resume" : "#132#Pause")) {
+        if (GuiButton((Rectangle){ this->_rect.x + 345.0f, this->_rect.y + 60.0f, 75.0f, 30.0f }, isPaused ? "#131#Resume" : "#132#Pause")) {
             this->_pf->toggleSolver();
         }
     }
 
     static bool isChecked = false;
     // Draw the animation speed checkbox
-    GuiCheckBox((Rectangle){ this->_rect.x + 25.0f, this->_rect.y + 110.0f, 15.0f, 15.0f }, "Animation Speed", &isChecked);
+    GuiCheckBox((Rectangle){ this->_rect.x + 25.0f, this->_rect.y + 120.0f, 15.0f, 15.0f }, "Animation Speed", &isChecked);
 
 
     static float speedSliderMinValue = 0.0f;
@@ -91,7 +103,7 @@ void ControlPanel::draw() const {
     static std::string speedValueText;
     // Draw the speed slider
     int valueChanged = GuiSlider(
-        (Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 130.0f, 280.0f, 25.0f }, 
+        (Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 150.0f, 280.0f, 25.0f }, 
         nullptr, 
         (ControlPanel::_animationSpeed > 0) ? speedValueText.c_str() : "No animation", 
         &ControlPanel::_animationSpeed, 
@@ -112,11 +124,9 @@ void ControlPanel::draw() const {
     // Reset the GUI state to normal
     GuiSetState(STATE_NORMAL);
 
-    // Draw the clear path and reset buttons
-    if (GuiButton((Rectangle){ this->_rect.x + 30.0f, this->_rect.y + 180.0f, 160.0f, 30.0f }, "#113#Clear Path")) this->_pf->clearPath();
-    if (GuiButton((Rectangle){ this->_rect.x + 200.0f, this->_rect.y + 180.0f, 160.0f, 30.0f }, "#211#Reset")) this->_pf->reset();
-
-
+    // Draw the grid properties label
+    GuiDrawText("Grid Properties", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 195.0f, this->_rect.width - 20.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
+    
     static int cols = static_cast<int>(this->_pf->getCols());
     static int rows = static_cast<int>(this->_pf->getRows());
 
@@ -125,12 +135,9 @@ void ControlPanel::draw() const {
 
     static bool gridResizeEditMode1 = false;
     static bool gridResizeEditMode2 = false;
-    
-    // Draw the grid size label
-    GuiDrawText("Grid Size", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 240.0f, 370.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
 
     // Draw the columns value box and handle resizing
-    if (GuiValueBox((Rectangle){ this->_rect.x + 106.0f, this->_rect.y + 270.0f, 80.0f, 30.0f }, nullptr, &cols, 10, 100, gridResizeEditMode1)) {
+    if (GuiValueBox((Rectangle){ this->_rect.x + 135.0f, this->_rect.y + 290.0f, 80.0f, 30.0f }, "Columns: ", &cols, 10, 100, gridResizeEditMode1)) {
         gridResizeEditMode1 = !gridResizeEditMode1;
         if (cols != currentCols) {
             this->_pf->resize(cols, rows);
@@ -139,15 +146,34 @@ void ControlPanel::draw() const {
     }
 
     // Draw the rows value box and handle resizing
-    if (GuiValueBox((Rectangle){ this->_rect.x + 202.0f, this->_rect.y + 270.0f, 80.0f, 30.0f }, "X ", &rows, 10, 100, gridResizeEditMode2)) {
+    if (GuiValueBox((Rectangle){ this->_rect.x + 285.0f, this->_rect.y + 290.0f, 80.0f, 30.0f }, "Rows: ", &rows, 10, 100, gridResizeEditMode2)) {
         gridResizeEditMode2 = !gridResizeEditMode2;
         if (rows != currentRows) {
             this->_pf->resize(cols, rows);
             currentRows = rows;
         }
     }
+    
+    // Draw the clear path and reset buttons
+    if (GuiButton((Rectangle){ this->_rect.x + 65.0f, this->_rect.y + 350.0f, 150.0f, 30.0f }, "#113#Clear Path")) this->_pf->clearPath();
+    if (GuiButton((Rectangle){ this->_rect.x + 235.0f, this->_rect.y + 350.0f, 150.0f, 30.0f }, "#211#Reset")) this->_pf->reset();
+
+    std::string nodeTypeText = std::format(
+        "WALL (INFINITY);AIR ({});GRASS ({});SAND ({});STONE ({});MOUNTAIN ({});WATER ({})", 
+        static_cast<int>(TerrainType::AIR), 
+        static_cast<int>(TerrainType::GRASS), 
+        static_cast<int>(TerrainType::SAND), 
+        static_cast<int>(TerrainType::STONE), 
+        static_cast<int>(TerrainType::MOUNTAIN), 
+        static_cast<int>(TerrainType::WATER)
+    );
+
+    // Draw the node type selection dropdown box
+    GuiLabel((Rectangle){ this->_rect.x + 55.0f, this->_rect.y + 235.0f, 100.0f, 30.0f }, "Node Type:");
+    if (GuiDropdownBox((Rectangle){ this->_rect.x + 145.0f, this->_rect.y + 235.0f, 250.0f, 30.0f }, 
+        nodeTypeText.c_str(), &_selectedNodeType, nodeTypeSelectionEditMode)) nodeTypeSelectionEditMode = !nodeTypeSelectionEditMode;
 
     // Draw the algorithm selection dropdown box
-    if (GuiDropdownBox((Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 60.0f, 275.0f, 25.0f }, 
+    if (GuiDropdownBox((Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 60.0f, 320.0f, 30.0f }, 
         "Breadth-First Search;Dijkstra's Algorithm; A* Algorithm", &selectedAlgo, algoSelectionEditMode)) algoSelectionEditMode = !algoSelectionEditMode;
 }

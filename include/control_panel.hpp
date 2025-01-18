@@ -21,6 +21,19 @@ public:
     ControlPanel(PathFinder* pf);
 
     /**
+     * @brief Gets the currently selected node type.
+     * @return The selected node type as an integer. Possible values are: 
+     * 0 : WALL,
+     * 1 : AIR,
+     * 5 : GRASS,
+     * 10 : SAND,
+     * 20 : STONE,
+     * 50 : MOUNTAIN,
+     * 100 : WATER
+     */
+    int getSelectedNodeType() const;
+
+    /**
      * @brief Gets the current animation speed.
      * @return The animation speed as a float.
      */
@@ -43,6 +56,8 @@ private:
 
     // The speed of the animation.
     static float _animationSpeed;
+
+    static int _selectedNodeType;
 
     // Pointer to the PathFinder instance.
     PathFinder* _pf;

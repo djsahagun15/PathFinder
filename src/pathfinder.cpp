@@ -152,6 +152,8 @@ void PathFinder::clearPath() {
 
 // Update the pathfinder state
 void PathFinder::update() {
+    this->_grid->_selectedNodeType = static_cast<TerrainType>(this->_panel->getSelectedNodeType());
+
     if (IsKeyPressed(KEY_R)) this->reset();
     else if (IsKeyPressed(KEY_C)) this->clearPath();
 
