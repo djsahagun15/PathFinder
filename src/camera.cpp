@@ -1,6 +1,5 @@
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 
 #include "camera.hpp"
 #include "grid.hpp"

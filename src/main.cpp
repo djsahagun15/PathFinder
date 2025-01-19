@@ -9,7 +9,6 @@
 
 std::unique_ptr<PathFinder> pf;
 
-#include <iostream>
 void runPathFinder() {
     if (pf) pf->run();
 }
