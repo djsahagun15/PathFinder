@@ -6,7 +6,12 @@
 #include "camera.hpp"
 
 // Linear interpolation between two vectors
-extern Vector2 lerp(Vector2 a, Vector2 b, float t);
+Vector2 lerp(Vector2 a, Vector2 b, float t) {
+    return Vector2 {
+        std::lerp(a.x, b.x, t),
+        std::lerp(a.y, b.y, t)
+    };
+}
 
 // External camera controller
 extern CameraController cameraController;

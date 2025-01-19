@@ -4,19 +4,6 @@
 #include "camera.hpp"
 #include "grid.hpp"
 
-// Linear interpolation between two floats
-float lerp(float a, float b, float t) {
-    return (1 - t) * a + t * b;
-}
-
-// Linear interpolation between two vectors
-Vector2 lerp(Vector2 a, Vector2 b, float t) {
-    return (Vector2){
-        lerp(a.x, b.x, t),
-        lerp(a.y, b.y, t)
-    };
-}
-
 // Constructor for CameraController
 CameraController::CameraController() {
     this->offset = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
