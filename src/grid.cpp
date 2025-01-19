@@ -122,6 +122,7 @@ unsigned int Grid::getRowCount() const { return this->_rows; };
 unsigned int Grid::getColRowCount() const { return this->_cols * this->_rows; };
 
 // Get neighboring nodes
+bool isDiagonalMovementAllowed = false;
 std::vector<Node*> Grid::getNeighbors(Node* node) const {
     std::vector<Node*> neighbors;
     
@@ -132,6 +133,20 @@ std::vector<Node*> Grid::getNeighbors(Node* node) const {
     if (x < this->_cols - 1) neighbors.push_back(this->_matrix[x + 1][y].get());
     if (y > 0) neighbors.push_back(this->_matrix[x][y - 1].get());
     if (y < this->_rows - 1) neighbors.push_back(this->_matrix[x][y + 1].get());
+
+    if (isDiagonalMovementAllowed) {
+        if ((x > 0 && y > 0) && (this->_matrix[x - 1][y]->getState() != State::WALL && this->_matrix[x][y - 1]->getState() != State::WALL))
+            neighbors.push_back(this->_matrix[x - 1][y - 1].get());
+
+        if ((x < this->_cols - 1 && y > 0) && (this->_matrix[x + 1][y]->getState() != State::WALL && this->_matrix[x][y - 1]->getState() != State::WALL))
+            neighbors.push_back(this->_matrix[x + 1][y - 1].get());
+
+        if ((x > 0 && y < this->_rows - 1) && (this->_matrix[x - 1][y]->getState() != State::WALL && this->_matrix[x][y + 1]->getState() != State::WALL))
+            neighbors.push_back(this->_matrix[x - 1][y + 1].get());
+
+        if ((x < this->_cols - 1 && y < this->_rows - 1) && (this->_matrix[x + 1][y]->getState() != State::WALL && this->_matrix[x][y + 1]->getState() != State::WALL))
+            neighbors.push_back(this->_matrix[x + 1][y + 1].get());
+    }
 
     return neighbors;
 }

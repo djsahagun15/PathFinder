@@ -17,12 +17,14 @@ int ControlPanel::_selectedNodeType = 0;
 
 extern int selectedDistanceFormula;
 
+extern bool isDiagonalMovementAllowed;
+
 
 ControlPanel::ControlPanel(PathFinder* pf) : _pf(pf) {
     // Initialize the control panel rectangle
     this->_rect = {
         static_cast<float>(GetScreenWidth() - 445.0f), 5.0f,
-        440.0f, 450.0f
+        440.0f, 480.0f
     };
 }
 
@@ -86,9 +88,11 @@ void ControlPanel::draw() const {
         }
     }
 
+    GuiCheckBox((Rectangle){ this->_rect.x + 25.0f, this->_rect.y + 170.0f, 15.0f, 15.0f }, "Allow Diagonal Movement", &isDiagonalMovementAllowed);
+
     static bool isChecked = false;
     // Draw the animation speed checkbox
-    GuiCheckBox((Rectangle){ this->_rect.x + 25.0f, this->_rect.y + 170.0f, 15.0f, 15.0f }, "Animation Speed", &isChecked);
+    GuiCheckBox((Rectangle){ this->_rect.x + 25.0f, this->_rect.y + 200.0f, 15.0f, 15.0f }, "Animation Speed", &isChecked);
 
 
     static float speedSliderMinValue = 0.0f;
@@ -108,7 +112,7 @@ void ControlPanel::draw() const {
     static std::string speedValueText;
     // Draw the speed slider
     int valueChanged = GuiSlider(
-        (Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 200.0f, 280.0f, 25.0f }, 
+        (Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 230.0f, 280.0f, 25.0f }, 
         nullptr, 
         (ControlPanel::_animationSpeed > 0) ? speedValueText.c_str() : "No animation", 
         &ControlPanel::_animationSpeed, 
@@ -130,7 +134,7 @@ void ControlPanel::draw() const {
     GuiSetState(STATE_NORMAL);
 
     // Draw the grid properties label
-    GuiDrawText("Grid Properties", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 245.0f, this->_rect.width - 20.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
+    GuiDrawText("Grid Properties", (Rectangle){ this->_rect.x + 10.0f, this->_rect.y + 275.0f, this->_rect.width - 20.0f, 30.0f }, TEXT_ALIGN_CENTER, BLACK);
     
     static int cols = static_cast<int>(this->_pf->getCols());
     static int rows = static_cast<int>(this->_pf->getRows());
@@ -142,7 +146,7 @@ void ControlPanel::draw() const {
     static bool gridResizeEditMode2 = false;
 
     // Draw the columns value box and handle resizing
-    if (GuiValueBox((Rectangle){ this->_rect.x + 135.0f, this->_rect.y + 340.0f, 80.0f, 30.0f }, "Columns: ", &cols, 10, 100, gridResizeEditMode1)) {
+    if (GuiValueBox((Rectangle){ this->_rect.x + 135.0f, this->_rect.y + 370.0f, 80.0f, 30.0f }, "Columns: ", &cols, 10, 100, gridResizeEditMode1)) {
         gridResizeEditMode1 = !gridResizeEditMode1;
         if (cols != currentCols) {
             this->_pf->resize(cols, rows);
@@ -151,7 +155,7 @@ void ControlPanel::draw() const {
     }
 
     // Draw the rows value box and handle resizing
-    if (GuiValueBox((Rectangle){ this->_rect.x + 285.0f, this->_rect.y + 340.0f, 80.0f, 30.0f }, "Rows: ", &rows, 10, 100, gridResizeEditMode2)) {
+    if (GuiValueBox((Rectangle){ this->_rect.x + 285.0f, this->_rect.y + 370.0f, 80.0f, 30.0f }, "Rows: ", &rows, 10, 100, gridResizeEditMode2)) {
         gridResizeEditMode2 = !gridResizeEditMode2;
         if (rows != currentRows) {
             this->_pf->resize(cols, rows);
@@ -160,8 +164,8 @@ void ControlPanel::draw() const {
     }
     
     // Draw the clear path and reset buttons
-    if (GuiButton((Rectangle){ this->_rect.x + 65.0f, this->_rect.y + 400.0f, 150.0f, 30.0f }, "#113#Clear Path")) this->_pf->clearPath();
-    if (GuiButton((Rectangle){ this->_rect.x + 235.0f, this->_rect.y + 400.0f, 150.0f, 30.0f }, "#211#Reset")) this->_pf->reset();
+    if (GuiButton((Rectangle){ this->_rect.x + 65.0f, this->_rect.y + 430.0f, 150.0f, 30.0f }, "#113#Clear Path")) this->_pf->clearPath();
+    if (GuiButton((Rectangle){ this->_rect.x + 235.0f, this->_rect.y + 430.0f, 150.0f, 30.0f }, "#211#Reset")) this->_pf->reset();
 
     std::string nodeTypeText = std::format(
         "WALL (INFINITY);AIR ({});GRASS ({});SAND ({});STONE ({});MOUNTAIN ({});WATER ({})", 
@@ -174,8 +178,8 @@ void ControlPanel::draw() const {
     );
 
     // Draw the node type selection dropdown box
-    GuiLabel((Rectangle){ this->_rect.x + 55.0f, this->_rect.y + 285.0f, 100.0f, 30.0f }, "Node Type:");
-    if (GuiDropdownBox((Rectangle){ this->_rect.x + 145.0f, this->_rect.y + 285.0f, 250.0f, 30.0f }, 
+    GuiLabel((Rectangle){ this->_rect.x + 55.0f, this->_rect.y + 315.0f, 100.0f, 30.0f }, "Node Type:");
+    if (GuiDropdownBox((Rectangle){ this->_rect.x + 145.0f, this->_rect.y + 315.0f, 250.0f, 30.0f }, 
         nodeTypeText.c_str(), &_selectedNodeType, nodeTypeSelectionEditMode)) nodeTypeSelectionEditMode = !nodeTypeSelectionEditMode;
     
     if (this->_pf->isSearching()) GuiLock();
