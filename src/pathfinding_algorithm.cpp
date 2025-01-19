@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-// Function to calculate the Euclidean distance between two points
+// Calculate the Euclidean distance between two points
 float euclideanDistance(Vector2 a, Vector2 b) {
     return std::sqrt(
         (a.x - b.x) * (a.x - b.x) +
@@ -11,9 +11,15 @@ float euclideanDistance(Vector2 a, Vector2 b) {
 }
 
 
-// Function to calculate the Manhattan distance between two points
+// Calculate the Manhattan distance between two points
 float manhattanDistance(Vector2 a, Vector2 b) {
     return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+}
+
+
+// Calculate the Chebyshev distance between two points
+float chebyshevDistance(Vector2 a, Vector2 b) {
+    return std::max(std::abs(a.x - b.x), std::abs(a.y - b.y));
 }
 
 

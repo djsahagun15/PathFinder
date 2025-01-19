@@ -1,5 +1,6 @@
 #include <limits>
 #include <cmath>
+#include <functional>
 
 #include "node.hpp"
 #include "pathfinding_algorithm.hpp"
@@ -35,8 +36,9 @@ void Node::setRect(Rectangle rect) {
 }
 
 // Calculate the Manhattan distance to another node
+unsigned int selectedDistanceFormula = 0;
 float Node::getDistance(Node* other) const {
-    return manhattanDistance(this->_center, other->_center);
+    return DISTANCE_FORMULAS[selectedDistanceFormula](this->_center, other->_center);
 }
 
 // Get the state of the node

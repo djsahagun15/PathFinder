@@ -22,6 +22,26 @@ float euclideanDistance(Vector2 a, Vector2 b);
 float manhattanDistance(Vector2 a, Vector2 b);
 
 /**
+ * @brief Calculates the Chebyshev distance between two points.
+ * 
+ * @param a The first point.
+ * @param b The second point.
+ * @return The Chebyshev distance between points a and b.
+ */
+float chebyshevDistance(Vector2 a, Vector2 b);
+
+
+/**
+ * @brief Array of distance formulas.
+ */
+constexpr std::array<float(*)(Vector2, Vector2), 3> DISTANCE_FORMULAS = {
+    manhattanDistance,
+    euclideanDistance,
+    chebyshevDistance
+};
+
+
+/**
  * @brief Abstract base class for pathfinding algorithms.
  */
 class PathfindingAlgorithm {
