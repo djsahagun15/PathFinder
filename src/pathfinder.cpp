@@ -3,6 +3,7 @@
 #include "bfs.hpp"
 #include "dijkstra.hpp"
 #include "astar.hpp"
+#include "gbs.hpp"
 
 #include "control_panel.hpp"
 
@@ -24,6 +25,7 @@ PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
     this->_algorithms.emplace_back(std::make_shared<BFS>(this->_grid));
     this->_algorithms.emplace_back(std::make_shared<Dijkstra>(this->_grid));
     this->_algorithms.emplace_back(std::make_shared<AStar>(this->_grid));
+    this->_algorithms.emplace_back(std::make_shared<GBS>(this->_grid));
 
     // Initialize state variables
     this->_isSearching = false;

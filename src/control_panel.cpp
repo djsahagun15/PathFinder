@@ -190,5 +190,5 @@ void ControlPanel::draw() const {
 
     // Draw the algorithm selection dropdown box
     if (GuiDropdownBox((Rectangle){ this->_rect.x + 20.0f, this->_rect.y + 60.0f, 320.0f, 30.0f }, 
-        "Breadth-First Search;Dijkstra's Algorithm; A* Algorithm", &selectedAlgo, algoSelectionEditMode)) algoSelectionEditMode = !algoSelectionEditMode;
+        "Breadth-First Search;Dijkstra's Algorithm; A* Algorithm;Greedy Best-First Search", &selectedAlgo, algoSelectionEditMode)) algoSelectionEditMode = !algoSelectionEditMode;
 }
