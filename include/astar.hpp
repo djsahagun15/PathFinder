@@ -1,8 +1,6 @@
 #ifndef _PATHFINDER_ASTAR_HPP_
 #define _PATHFINDER_ASTAR_HPP_
 
-#include <queue>
-
 #include "pathfinding_algorithm.hpp"
 
 /**
