@@ -55,7 +55,7 @@ void GBS::findPath(Node* start, Node* end, float speed) {
         }
 
         // Process each neighbor of the current node
-        std::vector<Node*> neighbors = this->_grid->getNeighbors(current);
+        std::vector<Node*> neighbors = this->getNeighbors(current);
         for (Node* neighbor : neighbors) {
             // Skip walls and visited nodes
             if (neighbor->getState() == State::WALL || neighbor->isVisited()) continue;
