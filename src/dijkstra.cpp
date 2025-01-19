@@ -1,6 +1,7 @@
 #include "dijkstra.hpp"
 
 #include <queue>
+#include <unordered_set>
 
 
 Dijkstra::Dijkstra(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
@@ -8,11 +9,13 @@ Dijkstra::Dijkstra(std::shared_ptr<Grid> grid) : PathfindingAlgorithm(grid) {}
 
 void Dijkstra::findPath(Node* start, Node* end, float speed) {
     static int added = 0;
+    static std::unordered_set<Node*> tracker;
 
     // Initialize on the first iteration
     if (this->_isFirstIter) {
         added = 0;
         while (!this->_queue.empty()) this->_queue.pop();
+        tracker.clear();
         
         start->setGCost(0.0f);
 
@@ -64,7 +67,10 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
                 neighbor->setGCost(gCost);
                 neighbor->setParent(current);
 
-                this->_queue.push(neighbor);
+                if (!tracker.contains(neighbor)) {
+                    this->_queue.push(neighbor);
+                    tracker.insert(neighbor);
+                }
 
                 added++;
             }
