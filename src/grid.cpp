@@ -1,8 +1,12 @@
 #include <algorithm>
 #include <limits>
+#include <cmath>
 
 #include "grid.hpp"
 #include "camera.hpp"
+
+// Linear interpolation between two vectors
+extern Vector2 lerp(Vector2 a, Vector2 b, float t);
 
 // External camera controller
 extern CameraController cameraController;
@@ -184,6 +188,7 @@ void Grid::update() {
     static Node* prevSelectedNode = nullptr;
     
     Vector2 mouse = cameraController.getMouseWorldPos();
+    static Vector2 prevMouse = mouse;
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && isMouseInRect(mouse)) {
         Node* selectedNode = this->getNode(mouse);
 
@@ -208,8 +213,23 @@ void Grid::update() {
             }
         }
         else if (selectedNode != this->_startNode && selectedNode != this->_endNode) {
-            // selectedNode->setState((State)(State::EMPTY + State::WALL - selectedState));
-            selectedNode->setTerrain(this->_selectedNodeType);
+            Vector2 d = { mouse.x - prevMouse.x, mouse.y - prevMouse.y };
+            float dist = std::sqrt(d.x * d.x + d.y * d.y);
+
+            unsigned int maxIter = static_cast<unsigned int>(dist / this->_nodeSize) + 1;
+            for (int i = 0; i < maxIter; i++) {
+                Vector2 interpolatedPoint = lerp(mouse, prevMouse, static_cast<float>(i) / maxIter);
+
+                interpolatedPoint.x = std::clamp(interpolatedPoint.x, this->_rect.x, this->_rect.x + this->_rect.width);
+                interpolatedPoint.y = std::clamp(interpolatedPoint.y, this->_rect.y, this->_rect.y + this->_rect.height);
+
+                Node* interpolatedNode = this->getNode(interpolatedPoint);
+                State interpolatedState = interpolatedNode->getState();
+
+                if (interpolatedState == State::START || interpolatedState == State::END) continue;
+
+                interpolatedNode->setTerrain(this->_selectedNodeType);
+            }
         }
 
         this->_shouldUpdatePath = true;
@@ -219,6 +239,8 @@ void Grid::update() {
         selectedState = State::NONE;
         prevSelectedNode = nullptr;
     }
+
+    prevMouse = mouse;
 }
 
 // Draw the grid
