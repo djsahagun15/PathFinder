@@ -75,9 +75,10 @@ void AStar::findPath(Node* start, Node* end, float speed) {
                 neighbor->setHCost(end);
                 neighbor->setParent(current);
 
-                if (!inOpenSet) this->_openSet.push_back(neighbor);
-
-                added++;
+                if (!inOpenSet) {
+                    this->_openSet.push_back(neighbor);
+                    added++;
+                }
             }
         }
     } while (--maxIter);

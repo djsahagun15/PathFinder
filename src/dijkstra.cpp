@@ -70,9 +70,8 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
                 if (!tracker.contains(neighbor)) {
                     this->_queue.push(neighbor);
                     tracker.insert(neighbor);
+                    added++;
                 }
-
-                added++;
             }
         }
     } while (--maxIter);
