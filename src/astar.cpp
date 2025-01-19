@@ -68,7 +68,7 @@ void AStar::findPath(Node* start, Node* end, float speed) {
 
             bool inOpenSet = std::find(this->_openSet.begin(), this->_openSet.end(), neighbor) != this->_openSet.end();
             
-            float gCost = current->getGCost() + current->getDistance(neighbor);
+            float gCost = current->getGCost() + current->getDistance(neighbor) * neighbor->getWeight();
 
             // Update costs and parent if a better path is found
             if (gCost < neighbor->getGCost() || !inOpenSet) {

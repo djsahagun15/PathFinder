@@ -54,10 +54,16 @@ void Node::setState(State state) {
     }
 }
 
+// Get the weight of the node based on the terrain type
+float Node::getWeight() const { return static_cast<float>(this->_terrain); }
+
+// Set the terrain type of the node and update its color
 void Node::setTerrain(TerrainType terrain) {
     if (static_cast<int>(terrain) != 0) this->_state = State::EMPTY;
     
     this->_terrain = terrain;
+
+    // Set the color based on the terrain type
     switch (this->_terrain) {
         case TerrainType::AIR : {
             this->_state = State::EMPTY;
@@ -74,6 +80,7 @@ void Node::setTerrain(TerrainType terrain) {
         }; break;
     }
 
+    // If the node has been visited, blend the color with a blue tint
     if (this->_isVisited) *this->_color = ColorAlphaBlend(*this->_color, { 0, 191, 255, 100 }, WHITE);
 }
 
@@ -93,7 +100,7 @@ unsigned int Node::getY() const { return this->_y; }
 
 // Set the G cost and update the F cost
 void Node::setGCost(float gCost) {
-    this->_gCost = gCost * static_cast<float>(this->_terrain);
+    this->_gCost = gCost;
     this->_fCost = this->_gCost + this->_hCost;
 }
 

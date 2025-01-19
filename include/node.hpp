@@ -87,11 +87,21 @@ public:
     void setState(State newState);
 
     /**
+     * @brief Gets weight of the node based on terrain type
+     * @return Float weight value
+     */
+    float getWeight() const;
+
+    /**
      * @brief Sets terrain type of the node
      * @param terrain New terrain type
      */
     void setTerrain(TerrainType terrain);
 
+    /**
+     * @brief Gets terrain type of the node
+     * @return TerrainType enum value
+     */
     TerrainType getTerrain() const { return this->_terrain; }
 
     /**

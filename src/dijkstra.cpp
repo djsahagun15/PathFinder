@@ -57,7 +57,7 @@ void Dijkstra::findPath(Node* start, Node* end, float speed) {
             // Skip walls and visited nodes
             if (neighbor->getState() == State::WALL || neighbor->isVisited()) continue;
             
-            float gCost = current->getGCost() + current->getDistance(neighbor);
+            float gCost = current->getGCost() + current->getDistance(neighbor) * neighbor->getWeight();
 
             // If a shorter path to the neighbor is found
             if (gCost < neighbor->getGCost()) {
