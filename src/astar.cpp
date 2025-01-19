@@ -1,6 +1,5 @@
 #include "astar.hpp"
 
-#include <queue>
 #include <algorithm>
 
 
