@@ -37,66 +37,51 @@ void BiDirectionalBFS::findPath(Node* start, Node* end, float speed) {
     startAdded = endAdded = 0;
 
     do {
-        if (!this->_startQueue.empty()) {
-            Node* current = this->_startQueue.front();
-            this->_startQueue.pop();
-
-            if (endVisited.find(current) != endVisited.end()) {
-                this->tracePath(start, end, current, startVisited, endVisited);
-                this->reset();
-                break;
-            }
-            
-            for (Node* neighbor : this->getNeighbors(current)) {
-                if (neighbor->getState() == State::WALL) continue;
-                
-                if (startVisited.find(neighbor) == startVisited.end()) {
-                    neighbor->setVisited(true);
-                    
-                    this->_startQueue.push(neighbor);
-                    startVisited[neighbor] = current;
-
-                    startAdded++;
-
-                    if (endVisited.find(neighbor) != endVisited.end()) {
-                        this->tracePath(start, end, neighbor, startVisited, endVisited);
-                        this->reset();
-                        break;
-                    }
-                }
-            }
+        Node* mid = nullptr;
+        
+        mid = this->expand(this->_startQueue, startVisited, endVisited, startAdded);
+        if (mid != nullptr) {
+            this->tracePath(start, end, mid, startVisited, endVisited);
+            this->reset();
+            break;
         }
 
-        if (!this->_endQueue.empty()) {
-            Node* current = this->_endQueue.front();
-            this->_endQueue.pop();
-
-            if (startVisited.find(current) != startVisited.end()) {
-                this->tracePath(start, end, current, startVisited, endVisited);
-                this->reset();
-                break;
-            }
-            
-            for (Node* neighbor : this->getNeighbors(current)) {
-                if (neighbor->getState() == State::WALL) continue;
-                
-                if (endVisited.find(neighbor) == endVisited.end()) {
-                    neighbor->setVisited(true);
-                    
-                    this->_endQueue.push(neighbor);
-                    endVisited[neighbor] = current;
-
-                    endAdded++;
-
-                    if (startVisited.find(neighbor) != startVisited.end()) {
-                        this->tracePath(start, end, neighbor, startVisited, endVisited);
-                        this->reset();
-                        break;
-                    }
-                }
-            }
+        mid = this->expand(this->_endQueue, endVisited, startVisited, endAdded);
+        if (mid != nullptr) {
+            this->tracePath(start, end, mid, startVisited, endVisited);
+            this->reset();
+            break;
         }
     } while (--maxIter);
+}
+
+
+Node* BiDirectionalBFS::expand(
+std::queue<Node*>& currentQueue, std::unordered_map<Node*, Node*>& currentVisited, 
+const std::unordered_map<Node*, Node*>& otherVisited, int& addedCounter) {
+    if (currentQueue.empty()) return nullptr;
+
+    Node* current = currentQueue.front();
+    currentQueue.pop();
+
+    if (otherVisited.contains(current)) return current;
+
+    for (Node* neighbor : this->getNeighbors(current)) {
+        if (neighbor->getState() == State::WALL) continue;
+
+        if (!currentVisited.contains(neighbor)) {
+            neighbor->setVisited(true);
+
+            currentQueue.push(neighbor);
+            currentVisited[neighbor] = current;
+
+            addedCounter++;
+
+            if (otherVisited.contains(neighbor)) return neighbor;
+        }
+    }
+
+    return nullptr;
 }
 
 

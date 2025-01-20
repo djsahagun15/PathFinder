@@ -40,7 +40,7 @@ public:
 private:
     void tracePath(Node* start, Node* end, Node* mid, std::unordered_map<Node*, Node*>& startVisited, std::unordered_map<Node*, Node*>& endVisited);
 
-    bool expand(std::queue<Node*>& currentQueue, std::unordered_map<Node*, Node*>& currentVisited, 
+    Node* expand(std::queue<Node*>& currentQueue, std::unordered_map<Node*, Node*>& currentVisited, 
                 const std::unordered_map<Node*, Node*>& otherVisited, int& addedCounter);
 
     // Queue used for the BiDirectionalBFS algorithm.
