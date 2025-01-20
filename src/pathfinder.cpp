@@ -86,6 +86,9 @@ unsigned int PathFinder::getCols() const { return this->_grid->getColCount(); }
 unsigned int PathFinder::getRows() const { return this->_grid->getRowCount(); }
 
 
+void PathFinder::moveGridRect() { this->_grid->moveRect(); }
+
+
 // Main run loop for the pathfinder
 void PathFinder::run() {
     static bool shouldUpdateCamera = false;

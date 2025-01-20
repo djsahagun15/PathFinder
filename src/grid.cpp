@@ -202,6 +202,41 @@ void Grid::reset() {
     this->_shouldUpdatePath = false;
 }
 
+bool isControlPanelVisible = true;
+void Grid::moveRect() {
+    int WINW = GetScreenWidth(), WINH = GetScreenHeight();
+    if (isControlPanelVisible) WINW -= 450;
+    
+    this->_nodeSize = std::min(static_cast<float>(WINW / this->_cols - 1), 
+                               static_cast<float>(WINH / this->_rows - 1));
+    
+    Vector2 offset {
+        (WINW - this->_cols * this->_nodeSize) / 2.0f,
+        (WINH - this->_rows * this->_nodeSize) / 2.0f
+    };
+    
+    this->_rect = {
+        offset.x + 1.0f,
+        offset.y + 1.0f,
+        this->_cols * this->_nodeSize + 1.0f,
+        this->_rows * this->_nodeSize + 1.0f
+    };
+
+    for (int x = 0; x < this->_cols; x++) {
+        for (int y = 0; y < this->_rows; y++) {
+            Rectangle nRect {
+                offset.x + x * this->_nodeSize + 1.0f,
+                offset.y + y * this->_nodeSize + 1.0f,
+                this->_nodeSize + 1.0f,
+                this->_nodeSize + 1.0f
+            };
+            
+            this->_matrix[x][y]->setRect(nRect);
+        }
+    }
+}
+
+
 // Update the grid based on mouse input
 void Grid::update() {
     static State selectedState = State::NONE;

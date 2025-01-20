@@ -114,6 +114,8 @@ private:
      */
     Node* getNode(Vector2 mouse) const;
 
+    void moveRect();
+
     // Matrix of nodes.
     std::vector<std::vector<std::unique_ptr<Node>>> _matrix;
 

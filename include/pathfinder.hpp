@@ -78,6 +78,8 @@ public:
      */
     unsigned int getRows() const;
 
+    void moveGridRect();
+
     /**
      * @brief Runs the pathfinding process.
      */

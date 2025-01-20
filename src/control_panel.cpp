@@ -19,6 +19,8 @@ extern int selectedDistanceFormula;
 
 extern bool isDiagonalMovementAllowed;
 
+extern bool isControlPanelVisible;
+
 
 ControlPanel::ControlPanel(PathFinder* pf) : _pf(pf) {
     // Initialize the control panel rectangle
@@ -45,6 +47,8 @@ float ControlPanel::getAnimSpeed() const {
 
 bool ControlPanel::isMouseInRect() const {
     // Check if the mouse is within the control panel rectangle
+    if (!isControlPanelVisible) return false;
+    
     Vector2 mouse = GetMousePosition();
     return mouse.x > this->_rect.x && mouse.x < this->_rect.x + this->_rect.width &&
            mouse.y > this->_rect.y && mouse.y < this->_rect.y + this->_rect.height;
@@ -57,7 +61,14 @@ void ControlPanel::draw() const {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 14);
 
     // Draw the control panel
-    GuiPanel(this->_rect, "#140#PathFinder Controller");
+    if (isControlPanelVisible) GuiPanel(this->_rect, "#140#PathFinder Controller");
+
+    if (GuiButton((Rectangle){ this->_rect.x + this->_rect.width - 22.0f, this->_rect.y + 2.0f, 20.0f, 20.0f }, isControlPanelVisible ? "#119#" : "#118#")) {
+        isControlPanelVisible ^= true;
+        this->_pf->moveGridRect();
+    }
+
+    if (!isControlPanelVisible) return;
 
     static int selectedAlgo = 0;
     static bool algoSelectionEditMode = false;
