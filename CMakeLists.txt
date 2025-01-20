@@ -16,6 +16,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/src/dijkstra.cpp
     ${CMAKE_SOURCE_DIR}/src/astar.cpp
     ${CMAKE_SOURCE_DIR}/src/gbs.cpp
+    ${CMAKE_SOURCE_DIR}/src/bidirectional_bfs.cpp
     ${CMAKE_SOURCE_DIR}/src/pathfinder.cpp
     ${CMAKE_SOURCE_DIR}/src/main.cpp
 )
