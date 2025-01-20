@@ -38,8 +38,26 @@ public:
     bool isSearchComplete() override;
 
 private:
+    /**
+     * @brief Traces the path from start node to the end node.
+     * 
+     * @param start The starting node.
+     * @param end The ending node.
+     * @param mid The midpoint/intersection node.
+     * @param startVisited A map containing the visited node from the start node.
+     * @param endVisited A map containing the visited node from the end node.
+     */
     void tracePath(Node* start, Node* end, Node* mid, std::unordered_map<Node*, Node*>& startVisited, std::unordered_map<Node*, Node*>& endVisited);
 
+    /**
+     * @brief Expand the current queue. This processes the next node in the specified queue and explores its neighbors.
+     * @return The intersecting node, if found. Otherwise, it will return `nullptr`.
+     * 
+     * @param currentQueue The current search direction.
+     * @param currentVisited A map containing the visited node from the current search direction.
+     * @param otherVisited A map containing the visited node from the opposite search direction.
+     * @param addedCounter A reference to the counter for tracking the number of nodes added during this expansion.
+     */
     Node* expand(std::queue<Node*>& currentQueue, std::unordered_map<Node*, Node*>& currentVisited, 
                 const std::unordered_map<Node*, Node*>& otherVisited, int& addedCounter);
 
