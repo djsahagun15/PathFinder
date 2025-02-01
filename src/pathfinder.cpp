@@ -17,6 +17,7 @@ const Color BACKGROUND = (Color){ 52, 73, 94, 255 };
 
 // Constructor for PathFinder class
 PathFinder::PathFinder(unsigned int cols, unsigned int rows) {
+    SetConfigFlags(FLAG_MSAA_4X_HINT); // Enable Anti-Aliasing
     InitWindow(1280, 720, "PathFinder"); // Initialize the window
     SetTargetFPS(60); // Set the target FPS
 
